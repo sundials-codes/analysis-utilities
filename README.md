@@ -23,3 +23,6 @@ family:
 ## Authors
 
 [Daniel R. Reynolds](https://people.smu.edu/dreynolds)
+and
+[Steven B. Roberts](https://people.llnl.gov/roberts115)
+
