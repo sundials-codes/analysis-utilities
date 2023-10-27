@@ -105,8 +105,12 @@ if (test_exp_embed)
              {'Dormand-Prince-ERK',        'dp_erk',              [-10,10,-10,10]},
              {'ARK5(4)8L[2]SA-ERK',        'ark548_erk',          [-15,5,-10,10]},
              {'ARK5(4)8L[2]SAb-ERK',       'ark548b_erk',         [-5,1,-4,4]},
-             {'Verner-6-5-ERK',            'v65_erk',             [-10,10,-10,10]},
-             {'Fehlberg-8-7-ERK',          'f87_erk',             [-10,10,-10,10]}
+             {'Verner-6-5-ERK',            'v65_erk',             [-9,9,-9,9]},
+             {'Verner-6-5b-ERK',           'v65b_erk',            [-8,6,-8,8]},
+             {'Verner-7-6-ERK',            'v76_erk',             [-6,2,-6,6]},
+             {'Verner-8-7-ERK',            'v87_erk',             [-8,8,-8,8]},
+             {'Verner-9-8-ERK',            'v98_erk',             [-8,8,-8,8]},
+             {'Fehlberg-8-7-ERK',          'f87_erk',             [-6,2,-6,6]}
            };
    fprintf('\nExplicit, embedded methods:\n\n');
    fprintf('                             |    |  Method |  Embedding  |\n');
@@ -119,7 +123,7 @@ if (test_exp_embed)
       B = butcher(mname,use_symbolic);
       s = size(B,2)-1;
       [q,p,qs,lq,lp,tol] = check_rk(B,0,plotregions,box,mname,fname);
-      fprintf(' %26s  | %2i | %2i  %2i  | %2i  %2i       | %.0e\n', mname,s,q,lq,p,lp,tol);
+      fprintf(' %26s  | %2i | %2i  %2i  | %2i  %2i      | %.0e\n', mname,s,q,lq,p,lp,tol);
    end
    fprintf('  -----------------------------------------------------------------\n');
    fprintf('\n');

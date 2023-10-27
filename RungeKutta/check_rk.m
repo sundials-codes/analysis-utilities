@@ -180,10 +180,12 @@ if (doPlot)
    xlabel('Re(z)')
    ylabel('Im(z)')
    if (embedded)
-      title(sprintf('%s stability regions, order %i',mname,q))
+%      title(sprintf('%s stability regions, order %i',mname,q))
+      title(sprintf('Stability boundary for %s method',mname))
       legend('method','embedding')
    else
-      title(sprintf('%s stability region, order %i',mname,q))
+%      title(sprintf('%s stability region, order %i',mname,q))
+      title(sprintf('Stability boundary for %s method',mname))
    end
    print(sprintf('%s_stab_region.png', fname), '-dpng');
    print(sprintf('%s_stab_region.eps', fname), '-depsc');
