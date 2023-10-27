@@ -83,7 +83,6 @@ function B = butcher(method_name,symbolic)
 %             Knoth-Wolke-ERK  |  3 |  3   3  | 1e-40
 %             SSP3(3,3,2)-ERK  |  3 |  3   3  | 1e-40
 %             SSP3(3,3,3)-ERK  |  3 |  3   3  | 1e-40
-%    SSPRK(3,3)-Shu-Osher-ERK  |  3 |  3   3  | 1e-40
 %           Ascher(3,4,3)-ERK  |  4 |  3   4  | 1e-17
 %                 Cooper4-ERK  |  4 |  3   3  | 1e-40
 %             SSP3(4,3,3)-ERK  |  4 |  3   3  | 1e-40
@@ -107,6 +106,7 @@ function B = butcher(method_name,symbolic)
 %                     ERK-3-3  |  3 |  3   3  |  2   2      | 1e-40
 %          ARK3(2)4L[2]SA-ERK  |  4 |  3   3  |  2   2      | 1e-25
 %        Bogacki-Shampine-ERK  |  4 |  3   3  |  2   2      | 1e-40
+%    SSPRK(3,3)-Shu-Osher-ERK  |  3 |  3   3  |             | 1e-40
 %              Merson-4-3-ERK  |  5 |  4   4  |  3   5      | 1e-40
 %           Zonneveld-4-3-ERK  |  5 |  4   4  |  3   3      | 1e-40
 %          ARK4(3)6L[2]SA-ERK  |  6 |  4   4  |  3   3      | 1e-25
@@ -2081,9 +2081,12 @@ elseif (strcmp(method_name,'SSPRK(3,3)-Shu-Osher-ERK'))
          v(1),   z,   z;...
          v(1)/v(4), v(1)/v(4), z];
    b = [ v(1)/v(6), v(1)/v(6), v(2)/v(3)];
+   b2 = [v(291485418878409)/v(1e15), v(291485418878409)/v(1e15), v(208514581121591)/RCONST(5e14)];
+
    c = [ z;   v(1);   v(1)/v(2)];
    q = 3;
-   B = [c, A; q, b];
+   p = 2;
+   B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'EDIRK-3-3'))
 

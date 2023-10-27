@@ -44,7 +44,6 @@ if (test_exp_nonembed)
              {'Knoth-Wolke-ERK',           'kw_erk',              [-3,0.5,-3,3]},
              {'SSP3(3,3,2)-ERK',           'ssp3332_erk',         [-3,0.5,-3,3]},
              {'SSP3(3,3,3)-ERK',           'ssp3333_erk',         [-3,1,-3,3]},
-             {'SSPRK(3,3)-Shu-Osher-ERK',  'ssprk33so_erk',       [-3,0.5,-3,3]}
              {'Ascher(3,4,3)-ERK',         'a343_erk',            [-3,0.5,-4,4]},
              {'Cooper4-ERK',               'cooper4_erk',         [-3,0.5,-3,3]},
              {'SSP3(4,3,3)-ERK',           'ssp3433_erk',         [-3,0.5,-3,3]},
@@ -95,6 +94,7 @@ if (test_exp_embed)
              {'ERK-3-3',                   'erk33',               [-3,0.5,-3,3]},
              {'ARK3(2)4L[2]SA-ERK',        'ark324_erk',          [-4,0.5,-4,4]},
              {'Bogacki-Shampine-ERK',      'bs_erk',              [-3.5,0.5,-3,3]},
+             {'SSPRK(3,3)-Shu-Osher-ERK',  'ssprk33so_erk',       [-3,0.5,-3,3]}
              {'Merson-4-3-ERK',            'm43_erk',             [-4,1,-4,4]},
              {'Zonneveld-4-3-ERK',         'z43_erk',             [-3,0.5,-3,3]},
              {'ARK4(3)6L[2]SA-ERK',        'ark436_erk',          [-5,1,-5,5]},
