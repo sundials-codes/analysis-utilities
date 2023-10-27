@@ -169,10 +169,10 @@ if (doPlot)
    xax = plot(linspace(xl(1),xl(2),10),zeros(1,10),'k:'); hold on
    yax = plot(zeros(1,10),linspace(yl(1),yl(2),10),'k:');
    [X,Y] = stab_region(A,b,box);
-   plot(X,Y,'r-')
+   plot(X,Y,'b-')
    if (embedded)
       [X,Y] = stab_region(A,d,box);
-      plot(X,Y,'b--')
+      plot(X,Y,'r-')
    end
    set(get(get(xax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
    set(get(get(yax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
