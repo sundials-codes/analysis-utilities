@@ -33,10 +33,10 @@ if (test_exp_nonembed)
              {'SSP2(2,2,2)-ERK',           'ssp2222_erk',         [-2.5,0.5,-3,3]},
              {'Ascher(2,3,2)-ERK',         'a232_erk',            [-3,0.5,-3,3]},
              {'ARK(2,3,2)-ERK',            'ark232_erk',          [-3,0.5,-3,3]},
-             {'Ascher(2,2,2)-ERK',         'a222_erk',            [-2.5,0.5,-3,3]},
              {'SSP2(3,3,2)-lpm1-ERK',      'ssp2332lpm1_erk',     [-5,0.5,-3,3]},
              {'SSP2(3,3,2)-lpm2-ERK',      'ssp2332lpm2_erk',     [-5,0.5,-3,3]},
              {'SSP2(3,3,2)-lpum-ERK',      'ssp2332lpum_erk',     [-5,0.5,-3,3]},
+             {'SSP2(3,3,2)-lum-ERK',       'ssp2332lum_erk',      [-5,0.5,-3,3]},
              {'SSP2(3,3,2)-lspum-ERK',     'ssp2332lspum_erk',    [-3.5,0.5,-3,3]},
              {'SSP2(3,3,2)-a-ERK',         'ssp2332a_erk',        [-5,0.5,-3,3]},
              {'SSP2(3,3,2)-b-ERK',         'ssp2332b_erk',        [-5,0.5,-3,3]},
@@ -91,7 +91,15 @@ if (test_exp_embed)
    %         {name,                        filename,              stability region bounding box}
    tests = {
              {'Heun-Euler-ERK',            'he_erk',              [-2.5,0.5,-2,2]},
+             {'SSP(2,2)-ERK',              'ssp22_erk',           [-2.5,0.5,-2,2]},
+             {'Ascher(2,2,2)-ERK',         'a222_erk',            [-2.5,0.5,-3,3]},
+             {'SSP(3,2)-ERK',              'ssp32_erk',           [-4,0.5,-4,4]},
+             {'SSP(4,2)-ERK',              'ssp42_erk',           [-6,0.5,-6,6]},
+             {'SSP(10,2)-ERK',             'ssp102_erk',          [-10,0.5,-10,10]},
              {'ERK-3-3',                   'erk33',               [-3,0.5,-3,3]},
+             {'SSP(4,3)-ERK',              'ssp43_erk',           [-6,0.5,-6,6]},
+             {'SSP(9,3)-ERK',              'ssp92_erk',           [-10,0.5,-10,10]},
+             {'SSP(16,3)-ERK',             'ssp162_erk',          [-20,0.5,-15,15]},
              {'ARK3(2)4L[2]SA-ERK',        'ark324_erk',          [-4,0.5,-4,4]},
              {'Bogacki-Shampine-ERK',      'bs_erk',              [-3.5,0.5,-3,3]},
              {'SSPRK(3,3)-Shu-Osher-ERK',  'ssprk33so_erk',       [-3,0.5,-3,3]}
@@ -100,6 +108,7 @@ if (test_exp_embed)
              {'ARK4(3)6L[2]SA-ERK',        'ark436_erk',          [-5,1,-5,5]},
              {'Sayfy-Aburub-4-3-ERK',      'sa43_erk',            [-3,0.5,-2.5,2.5]},
              {'ARK4(3)7L[2]SA-ERK',        'ark437_erk',          [-8,1,-6,6]},
+             {'SSP(10,4)-ERK',             'ssp104_erk',          [-10,0.5,-10,10]},
              {'Fehlberg-ERK',              'fehlberg_erk',        [-4,1,-4,4]},
              {'Cash-Karp-ERK',             'cashkarp_erk',        [-10,10,-10,10]},
              {'Dormand-Prince-ERK',        'dp_erk',              [-10,10,-10,10]},
@@ -109,8 +118,8 @@ if (test_exp_embed)
              {'Verner-6-5b-ERK',           'v65b_erk',            [-8,6,-8,8]},
              {'Verner-7-6-ERK',            'v76_erk',             [-6,2,-6,6]},
              {'Verner-8-7-ERK',            'v87_erk',             [-8,8,-8,8]},
-             {'Verner-9-8-ERK',            'v98_erk',             [-8,8,-8,8]},
              {'Fehlberg-8-7-ERK',          'f87_erk',             [-6,2,-6,6]}
+             {'Verner-9-8-ERK',            'v98_erk',             [-8,8,-8,8]},
            };
    fprintf('\nExplicit, embedded methods:\n\n');
    fprintf('                             |    |  Method |  Embedding  |\n');
@@ -149,11 +158,11 @@ if (test_dirk_nonembed)
    tests = {
              {'SSP2(2,2,2)-SDIRK',         'ssp2222_sdirk',       [-2,15,-10,10]},
              {'Ascher(2,3,2)-SDIRK',       'a232_sdirk',          [-5,15,-10,10]},
-             {'Ascher(2,2,2)-SDIRK',       'a222_sdirk',          [-5,15,-10,10]},
              {'ARK(2,3,2)-SDIRK',          'ark232_sdirk',        [-2,15,-10,10]},
              {'SSP2(3,3,2)-lpm1-SDIRK',    'ssp2332lpm1_sdirk',   [-2,30,-20,20]},
              {'SSP2(3,3,2)-lpm2-SDIRK',    'ssp2332lpm2_sdirk',   [-2,30,-20,20]},
              {'SSP2(3,3,2)-lpum-SDIRK',    'ssp2332lpum_sdirk',   [-2,30,-20,20]},
+             {'SSP2(3,3,2)-lum-DIRK',      'ssp2332lum_dirk',     [-2,30,-20,20]},
              {'SSP2(3,3,2)-lspum-SDIRK',   'ssp2332lspum_sdirk',  [-2,30,-20,20]},
              {'SSP2(3,3,2)-a-DIRK',        'ssp2332a_dirk',       [-2,15,-10,10]},
              {'SSP2(3,3,2)-b-DIRK',        'ssp2332b_dirk',       [-2,12,-10,10]},
@@ -218,6 +227,9 @@ if (test_dirk_embed)
    tests = {
              {'SDIRK-2-1',                 'sdirk21',             [0,6,-3,3]},
              {'SDIRK-2-2',                 'sdirk22',             [-5,15,-8,8]},
+             {'SSP(2,2)-SDIRK'             'ssp22_sdirk',         [-5,15,-8,8]},
+             {'Ascher(2,2,2)-SDIRK'        'ars222_sdirk',        [-5,15,-8,8]},
+             {'SSP(3,2)-DIRK'              'ssp32_dirk',          [-5,15,-8,8]},
              {'TRBDF2-ESDIRK',             'trbdf2_esdirk',       [-10,15,-8,8]},
              {'TRX2-ESDIRK',               'trx2_esdirk',         [-10,2,-8,8]},
              {'Billington-SDIRK',          'b_sdirk',             [-30,15,-15,15]},
@@ -231,8 +243,8 @@ if (test_dirk_embed)
              {'Kvaerno(5,3,4)-ESDIRK',     'k534_esdirk',         [-5,40,-20,20]},
              {'Cash(5,2,4)-SDIRK',         'c524_sdirk',          [-5,90,-50,50]},
              {'ESDIRK4(3)6L[2]SA',         'esdirk46l',           [-5,30,-20,20]},
-             {'ESDIRK4(3I)6L[2]SA',        'esdirk46il',          [-5,30,-20,20]},
              {'ESDIRK4(3)7L[2]SA',         'esdirk47l',           [-5,30,-20,20]},
+             {'ESDIRK4(3I)6L[2]SA',        'esdirk46il',          [-5,30,-20,20]},
              {'QESDIRK4(3)6L[2]SA',        'qesdirk46l',          [-5,30,-20,20]},
              {'ARK4(3)6L[2]SA-ESDIRK',     'ark436_esdirk',       [-5,30,-20,20]},
              {'ARK4(3)7L[2]SA-ESDIRK',     'ark437_esdirk',       [-5,80,-50,50]},
@@ -243,9 +255,9 @@ if (test_dirk_embed)
              {'ARK5(4)8L[2]SA-ESDIRK',     'ark548_esdirk',       [-5,45,-25,25]},
              {'ARK5(4)8L[2]SAb-ESDIRK',    'ark548b_esdirk',      [-5,30,-15,15]},
              {'Kvaerno(7,4,5)-ESDIRK',     'k745_esdirk',         [-5,120,-60,60]},
+             {'ESDIRK6(5)9L[2]SA',         'esdirk69',            [-5,120,-60,60]},
              {'ESDIRK5(4I)8L[2]SA',        'esdirk58il',          [-5,120,-60,60]},
              {'ESDIRK6(4)7A[2]',           'esdirk67',            [-5,120,-60,60]},
-             {'ESDIRK6(5)9L[2]SA',         'esdirk69',            [-5,120,-60,60]},
            };
 
    fprintf('\nDiagonally-implicit, embedded methods:\n\n');
@@ -329,6 +341,7 @@ if (test_irk)
              {'LobattoIIIA-4-6-IRK',       'liiia46_irk',         [-5,5,-5,5]},
              {'LobattoIIIB-4-6-IRK',       'liiib46_irk',         [-5,5,-5,5]},
              {'LobattoIII-4-6-IRK',        'liii46_irk',          [-15,5,-8,8]},
+             {'RadauIIA-4-7-IRK',          'riia47_irk',          [-4,20,-15,15]},
              {'LobattoIIIC-5-8-IRK',       'liiic58_irk',         [-2,20,-15,15]},
              {'LobattoIIIA-5-8-IRK',       'liiia58_irk',         [-5,5,-5,5]},
              {'LobattoIIIB-5-8-IRK',       'liiib58_irk',         [-5,5,-5,5]},
