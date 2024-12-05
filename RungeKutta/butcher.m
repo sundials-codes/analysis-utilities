@@ -105,7 +105,7 @@ function B = butcher(method_name,symbolic)
 %              Heun-Euler-ERK  |  2 |  2   2  |  1   1      | 1e-40
 %                SSP(2,2)-ERK  |  2 |  2   2  |  1   1      | 1e-40
 %           Ascher(2,2,2)-ERK  |  3 |  2   2  |  1   1      | 1e-40
-%                SSP(3,2)-ERK  |  3 |  2   2  |  1   1      | 1e-40
+%            Giraldo-ARK2-ERK  |  3 |  2   2  |  1   1      | 1e-40
 %                SSP(4,2)-ERK  |  4 |  2   2  |  1   1      | 1e-40
 %               SSP(10,2)-ERK  | 10 |  2   2  |  1   1      | 1e-40
 %                     ERK-3-3  |  3 |  3   3  |  2   2      | 1e-40
@@ -128,7 +128,7 @@ function B = butcher(method_name,symbolic)
 %         ARK5(4)8L[2]SAb-ERK  |  8 |  5   5  |  4   4      | 1e-25
 %              Verner-6-5-ERK  |  8 |  6   6  |  5   5      | 1e-40
 %             Verner-6-5b-ERK  |  9 |  6   6  |  5   5      | 1e-12
-%              Verner-7-6-ERK  | 10 |  6+  7  |  6   ?      | 1e-14
+%              Verner-7-6-ERK  | 10 |  6+  7  |  6   6      | 1e-14
 %              Verner-8-7-ERK  | 13 |  6+  8  |  6+  7      | 1e-13
 %            Fehlberg-8-7-ERK  | 13 |  6+  8  |  6+  7      | 1e-40
 %              Verner-9-8-ERK  | 16 |  6+  9  |  6+  8      | 1e-15
@@ -172,6 +172,7 @@ function B = butcher(method_name,symbolic)
 %                   SDIRK-2-2  |  2 |  2   2   Y       Y  |  1   1              |  1  1e-40
 %              SSP(2,2)-SDIRK  |  2 |  2   2   Y   Y   Y  |  1   1   Y          |  ?  1e-40
 %         Ascher(2,2,2)-SDIRK  |  3 |  2   2   Y       Y  |  1   1   Y          |  1  1e-40
+%         Giraldo-ARK2-ESDIRK  |  3 |  2   2   Y       Y  |  1   1   Y          |  2  1e-40
 %               SSP(3,2)-DIRK  |  3 |  2   2   Y       Y  |  1   1   Y          |  1  1e-40
 %               TRBDF2-ESDIRK  |  3 |  2   2   Y       Y  |  3   3              |  2  1e-40
 %                 TRX2-ESDIRK  |  3 |  2   2   Y          |  3   3              |  2  1e-40
@@ -2340,6 +2341,34 @@ elseif (strcmp(method_name,'ESDIRK-3-3'))
    c = [ z;   v(1);   v(1)/v(2)];
    q = 3;
    B = [c, A; q, b];
+
+elseif (strcmp(method_name,'Giraldo-ARK2-ERK'))
+
+   % Explicit portion of ARK2 method from https://doi.org/10.1137/120876034
+
+   A = [ z,                      z,                      z;...
+         v(2)-sqrt(v(2)),        z,                      z;...
+         (v(3)-sqrt(v(8)))/v(6), (v(3)+sqrt(v(8)))/v(6), z];
+   b = [ v(1)/sqrt(v(8)), v(1)/sqrt(v(8)), v(1)-v(1)/sqrt(v(2))];
+   b2 = [(v(4)-sqrt(v(2)))/v(8), (v(4)-sqrt(v(2)))/v(8), v(1)/sqrt(v(8))];
+   c = [ z; v(2)-sqrt(v(2)); v(1)];
+   q = 3;
+   p = 2;
+   B = [c, A; q, b; p, b2];
+
+elseif (strcmp(method_name,'Giraldo-ARK2-ESDIRK'))
+
+   % Implicit portion of ARK2 method from https://doi.org/10.1137/120876034
+
+   A = [ z,                    z,                    z;...
+         v(1)-v(1)/sqrt(v(2)), v(1)-v(1)/sqrt(v(2)), z; ...
+         v(1)/sqrt(v(8)), v(1)/sqrt(v(8)), v(1)-v(1)/sqrt(v(2))];
+   b = [ v(1)/sqrt(v(8)), v(1)/sqrt(v(8)), v(1)-v(1)/sqrt(v(2))];
+   b2 = [(v(4)-sqrt(v(2)))/v(8), (v(4)-sqrt(v(2)))/v(8), v(1)/sqrt(v(8))];
+   c = [ z; v(2)-sqrt(v(2)); v(1)];
+   q = 3;
+   p = 2;
+   B = [c, A; q, b; p, b2];
 
 else
 
