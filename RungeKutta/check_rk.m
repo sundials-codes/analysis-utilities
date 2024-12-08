@@ -116,11 +116,23 @@ end
 [q,lq] = table_order(c,A,b,tol,reportL);
 [As,Bs,Ls] = stability(A,b,StabTol);
 
+% check for SSP coefficient of method
+try
+  ssp = ssp_coefficient(double(A), double(b));
+catch
+  ssp = -1;
+end
+
 % report on method
 if (reportL>0)
    fprintf('  %s stage order = %i\n', mname, qs);
-   fprintf('    method:    q = %i,  lq = %i,  As = %i,  Bs = %i,  Ls = %i,  SA = %i\n', ...
-           q, lq, As, Bs, Ls, SA);
+   if (ssp > 0)
+      fprintf('    method:    q = %i,  lq = %i,  As = %i,  Bs = %i,  Ls = %i,  SA = %i, SSP = %g\n', ...
+              q, lq, As, Bs, Ls, SA, ssp);
+   else
+      fprintf('    method:    q = %i,  lq = %i,  As = %i,  Bs = %i,  Ls = %i,  SA = %i\n', ...
+              q, lq, As, Bs, Ls, SA);
+   end
 end
 
 % if an embedding exists, assess embedding properties
@@ -164,15 +176,13 @@ end
 
 % generate plot of stability region
 if (doPlot)
-   figure()
+   fig = figure();
    xl = box(1:2);  yl = box(3:4);
    xax = plot(linspace(xl(1),xl(2),10),zeros(1,10),'k:'); hold on
    yax = plot(zeros(1,10),linspace(yl(1),yl(2),10),'k:');
-   [X,Y] = stab_region(A,b,box);
-   plot(X,Y,'b-')
+   stab_region(double(A),double(b),box,fig,'r-');  % method
    if (embedded)
-      [X,Y] = stab_region(A,d,box);
-      plot(X,Y,'r-')
+      stab_region(double(A),double(d),box,fig,'b--');  % embedding
    end
    set(get(get(xax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
    set(get(get(yax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
@@ -840,14 +850,19 @@ function [As,Bs,Ls] = stability(A,b,tol)
    % check analytic in left half-plane
    beta2 = fliplr(beta_dbl);
    alpha2 = fliplr(alpha_dbl);
-   rt = roots(beta2);
-   As = 1;
-   for i=1:length(rt)
-      if (real(rt(i)) < -tol)
-         As=0;
-         break
+   try
+      rt = roots(beta2);
+      As = 1;
+      for i=1:length(rt)
+         if (real(rt(i)) < -tol)
+            As=0;
+            break
+         end
       end
+   catch
+      As=0;
    end
+
 
    % check along imaginary axis
    ztests = [0, sqrt(-1)*logspace(-5,4,10000)];

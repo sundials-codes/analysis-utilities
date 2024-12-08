@@ -2115,12 +2115,24 @@ if (~failed || ~failE || ~failI)
 end
 
 
+% determine SSP coefficients for component methods
+try
+  ERK_ssp = ssp_coefficient(double(AE), double(bE));
+catch
+  ERK_ssp = -1;
+end
+try
+  DIRK_ssp = ssp_coefficient(double(AI), double(bI));
+catch
+  DIRK_ssp = -1;
+end
+
 
 % report
 if (reportL>0)
    fprintf('  Overall results:\n');
-   fprintf('    ERK:  order = %i,  stage order = %i,  stiffly accurate = %i\n', qE,qsE,expSA);
-   fprintf('    DIRK: order = %i,  stage order = %i,  stiffly accurate = %i\n', qI,qsI,impSA);
+   fprintf('    ERK:  order = %i,  stage order = %i,  stiffly accurate = %i,  SSP coeff = %g\n', qE,qsE,expSA,ERK_ssp);
+   fprintf('    DIRK: order = %i,  stage order = %i,  stiffly accurate = %i,  SSP coeff = %g\n', qI,qsI,impSA,DIRK_ssp);
    fprintf('          B/A/L stability = %i/%i/%i\n', BsImp,AsImp,LsImp);
    fprintf('    ARK:  order = %i,  stage order = %i\n', q, qsA);
 end
@@ -2128,14 +2140,12 @@ end
 
 % generate plot of stability regions
 if (doPlot)
-   figure()
+   fig = figure();
    xl = box(1:2);  yl = box(3:4);
    xax = plot(linspace(xl(1),xl(2),10),zeros(1,10),'k:'); hold on
    yax = plot(zeros(1,10),linspace(yl(1),yl(2),10),'k:');
-   [X,Y] = stab_region(AE,bE,box);     % ERK stability region boundary
-   plot(X,Y,'r-')
-   [X,Y] = stab_region(AI,bI,box);     % DIRK stability region boundary
-   plot(X,Y,'b-'), hold off
+   stab_region(double(AE),double(bE),box,fig,'r-');     % ERK stability region
+   stab_region(double(AI),double(bI),box,fig,'b-');     % DIRK stability region
    set(get(get(xax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
    set(get(get(yax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
    axis(box)

@@ -42,6 +42,9 @@ if ( (length(ce) ~= length(ci)) || ...
    error('incompatible Butcher table inputs')
 end
 
+% determine number of stages
+s = length(ce);
+
 
 % perform test for ERK method
 qse = stage_order(ce,Ae,tol);

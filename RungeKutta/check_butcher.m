@@ -1,15 +1,15 @@
 function [q,p,Bs,As,Ls,BsE,AsE,LsE] = check_butcher(B)
 % Usage: [q,p,Bs,As,Ls,BsE,AsE,LsE] = check_butcher(B)
-% 
+%
 % Checks the Butcher table B to determine the analytical order of
 % accuracy for the method (q) and its embedding (p), whether the
 % method and embedding are B stable, and estimates of whether the
 % method and embedding are A and/or L stable.  It is assumed that B
-% has block structure 
+% has block structure
 %     B = [c, A; 0, b]
-% for a standard Runge-Kutta method, or 
+% for a standard Runge-Kutta method, or
 %     B = [c, A; 0, b; 0, b2]
-% if the method has an embedded error indicator.  
+% if the method has an embedded error indicator.
 %
 % If the method has no embedding, then we set p=0.
 %
@@ -20,9 +20,9 @@ function [q,p,Bs,As,Ls,BsE,AsE,LsE] = check_butcher(B)
 %    J.C. Butcher, "Implicit Runge-Kutta processes", Math Comp
 %    18 (1964), pp 50-64.
 %
-% For B-stability, we check for positive semi-definiteness of 
+% For B-stability, we check for positive semi-definiteness of
 %    M(i,j) = [b(i)*A(i,j) + b(j)*A(j,i) - b(i)*b(j)]
-% as outlined in 
+% as outlined in
 %    K. Burrage and J.C. Butcher, "Stability criteria for implicit
 %    Runge-Kutta methods", SIAM J. Numer. Anal. 16 (1979), pp
 %    46-57.
@@ -65,7 +65,7 @@ for i=1:1000
    LHS = b'*(c.^(i-1));
    RHS = 1/i;
    if (abs(RHS-LHS)>tol)
-      break;  
+      break;
    end
    P = P+1;
 end
@@ -101,7 +101,7 @@ for k=1:1000
       RHS = b(j)/k*(1-c(j)^k);
       if (abs(RHS-LHS)>tol)
          alltrue = 0;
-         break;  
+         break;
       end
    end
    if (alltrue == 1)
@@ -114,15 +114,15 @@ end
 % determine q
 q = 0;
 for i=1:P
-   if ((q > Q+R+1) || (q > 2*Q+2)),  
-      break;  
+   if ((q > Q+R+1) || (q > 2*Q+2)),
+      break;
    end
    q = q+1;
 end
 
 
 % if there's an embedding, determine the order
-if (length(d) > 1) 
+if (length(d) > 1)
    P = 0;
    for i=1:1000
       LHS = d'*(c.^(i-1));
@@ -141,7 +141,7 @@ if (length(d) > 1)
          RHS = d(j)/k*(1-c(j)^k);
          if (abs(RHS-LHS)>tol)
             alltrue = 0;
-            break;  
+            break;
          end
       end
       if (alltrue == 1)
@@ -155,7 +155,7 @@ if (length(d) > 1)
       if ((p > Q+R+1) || (p > 2*Q+2)),  break;  end
       p = p+1;
    end
-  
+
 else
    p = 0;
 end
@@ -202,7 +202,7 @@ for i=1:length(beta_dbl)-1
       break;
    end
 end
-   
+
 %   check analytic in left half-plane
 beta2 = fliplr(beta_dbl);
 alpha2 = fliplr(alpha_dbl);
@@ -235,7 +235,11 @@ end
 
 % check L stability:
 %   if degree of denominator is greater than degree of numerator in
-%   ational stability polynomial, then it will be L-stable
+%   rational stability polynomial, then it will be L-stable
+%
+%   Alternately, if they have the same degree but the leading term
+%   for numerator is sufficiently smaller than denominator, then
+%   conclude L-stability anyways.
 numdeg = length(alpha)-1;
 for i=0:length(alpha)-1
    if (abs(alpha(end-i)) < tol^2)
@@ -251,13 +255,17 @@ end
 if (dendeg > numdeg)
    Ls = 1;
 else
-   Ls = 0;
+   if (abs(alpha(end))/abs(beta(end)) < 1e-14)
+     Ls = 1;
+   else
+     Ls = 0;
+   end
 end
 
 
 % determine B stability of embedding
 BsE = 0;
-if (length(d) > 1) 
+if (length(d) > 1)
    M = zeros(s,s);
    for j=1:s
       for i=1:s
@@ -299,7 +307,7 @@ if (length(d) > 1)
          break;
       end
    end
-   
+
    %   check analytic in left half-plane
    beta2 = fliplr(beta_dbl);
    alpha2 = fliplr(alpha_dbl);

@@ -37,18 +37,20 @@ Rsimp = simplifyFraction(R, 'Expand', true);
 % extract numerator and denominator polynomials
 [n,d] = numden(Rsimp);
 
-% extract coefficients of each polynomial 
+% extract coefficients of each polynomial
 % (sorted from lowest to highest degree)
 alpha = fliplr(coeffs(n,z,'All'));
 beta = fliplr(coeffs(d,z,'All'));
 
 % scale both so that constant terms are at most 1
-if (abs(alpha(1)) > abs(beta(1)))
-    beta = beta / alpha(1);
-    alpha = alpha / alpha(1);
-else
-    alpha = alpha / beta(1);
-    beta = beta / beta(1);
+if (~isa(alpha(1),'sym'))
+   if (abs(alpha(1)) > abs(beta(1)))
+      beta = beta / alpha(1);
+      alpha = alpha / alpha(1);
+   else
+      alpha = alpha / beta(1);
+      beta = beta / beta(1);
+   end
 end
 
 % remove any trailing zeros for non-symbolic coefficients
@@ -65,6 +67,6 @@ if (~isa(alpha(1),'sym'))
          beta = beta(1:end-1);
       else
          break;
-      end   
+      end
    end
 end
