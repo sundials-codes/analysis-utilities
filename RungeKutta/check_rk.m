@@ -176,7 +176,7 @@ end
 
 % generate plot of stability region
 if (doPlot)
-   fig = figure()
+   fig = figure();
    xl = box(1:2);  yl = box(3:4);
    xax = plot(linspace(xl(1),xl(2),10),zeros(1,10),'k:'); hold on
    yax = plot(zeros(1,10),linspace(yl(1),yl(2),10),'k:');
