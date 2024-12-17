@@ -134,21 +134,21 @@ for itheta = 1:length(thetas)
     cols = idx+1:idx+c(2,idx);
     X = c(1,cols);
     Y = c(2,cols);
-    plot(X, Y, 'color', CM(itheta,:))
+    plot(X, Y, 'color', CM(itheta,:), 'DisplayName', sprintf('theta = %g', thetas(itheta)))
     idx = idx + c(2,idx) + 1;
   end
   hold off
 
 end
-fprintf('\n')
 
 % finish up figure
 set(get(get(xax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
 set(get(get(yax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
-axis(box)
-xlabel('Re(zE)')
-ylabel('Im(zE)')
-legend(arrayfun(@(th) sprintf('theta = %g', th), thetas, 'UniformOutput', false),'Location', 'northwest')
+axis(box);
+xlabel('Re(zE)');
+ylabel('Im(zE)');
+%legend(arrayfun(@(th) sprintf('theta = %g', th), thetas, 'UniformOutput', false),'Location', 'northwest')
+legend('Location', 'northwest');
 hold off
 
 
