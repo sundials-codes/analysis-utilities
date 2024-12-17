@@ -106,8 +106,10 @@ function B = butcher(method_name,symbolic)
 %                SSP(2,2)-ERK  |  2 |  2   2  |  1   1      | 1e-40
 %           Ascher(2,2,2)-ERK  |  3 |  2   2  |  1   1      | 1e-40
 %            Giraldo-ARK2-ERK  |  3 |  2   2  |  1   1      | 1e-40
+%                SSP(3,2)-ERK  |  3 |  2   2  |  1   1      | 1e-40
 %                SSP(4,2)-ERK  |  4 |  2   2  |  1   1      | 1e-40
 %               SSP(10,2)-ERK  | 10 |  2   2  |  1   1      | 1e-40
+%       SSP2(3,3,2)-lspum-ERK  |  3 |  2   2  |  1   ?      | 1e-40
 %                     ERK-3-3  |  3 |  3   3  |  2   2      | 1e-40
 %                SSP(4,3)-ERK  |  4 |  3   3  |  2   2      | 1e-40
 %                SSP(9,3)-ERK  |  9 |  3   3  |  2   2      | 1e-40
@@ -172,28 +174,31 @@ function B = butcher(method_name,symbolic)
 %                   SDIRK-2-2  |  2 |  2   2   Y       Y  |  1   1              |  1  1e-40
 %              SSP(2,2)-SDIRK  |  2 |  2   2   Y   Y   Y  |  1   1   Y          |  ?  1e-40
 %         Ascher(2,2,2)-SDIRK  |  3 |  2   2   Y       Y  |  1   1   Y          |  1  1e-40
-%         Giraldo-ARK2-ESDIRK  |  3 |  2   2   Y       Y  |  1   1   Y          |  2  1e-40
 %               SSP(3,2)-DIRK  |  3 |  2   2   Y       Y  |  1   1   Y          |  1  1e-40
+%     SSP2(3,3,2)-lspum-SDIRK  |  3 |  2   2   Y       Y  |  1       Y       Y  |     1e-40
+%         Giraldo-ARK2-ESDIRK  |  3 |  2   2   Y       Y  |  1   1   Y          |  2  1e-40
 %               TRBDF2-ESDIRK  |  3 |  2   2   Y       Y  |  3   3              |  2  1e-40
 %                 TRX2-ESDIRK  |  3 |  2   2   Y          |  3   3              |  2  1e-40
 %            Billington-SDIRK  |  3 |  2   2   Y          |  3   3              |  1  1e-11
+%             SSP(4,3)-ESDIRK  |  4 |  3   3   Y       Y  |  2   2   Y          |  1  1e-40
 %       ARK3(2)4L[2]SA-ESDIRK  |  4 |  3   3   Y       Y  |  2   2   Y          |  2  1e-25
 %       Kvaerno(4,2,3)-ESDIRK  |  4 |  3   3   Y          |  2   2   Y          |  2  1e-14
 %           ESDIRK3(2)4L[2]SA  |  4 |  3   3   Y       Y  |  2   2   Y          |  2  1e-40
-%           ESDIRK3(2)5L[2]SA  |  5 |  3   3   Y       Y  |  2   2   Y          |  2  1e-25
+%           ESDIRK3(2)5L[2]SA  |  5 |  3   3   Y       Y  |  2   2   Y       Y  |  2  1e-25
 %          ESDIRK3(2I)5L[2]SA  |  5 |  3   3   Y       Y  |  2   2   Y       Y  |  2  1e-40
+%               SSP(9,3)-DIRK  |  9 |  3   3   Y       Y  |  2   2   Y       Y  |  1  1e-40
 %                   SDIRK-5-4  |  5 |  4   4   Y       Y  |  3   3           Y  |  1  1e-40
 %           Cash(5,3,4)-SDIRK  |  5 |  4   4   Y       Y  |  3   3   Y          |  1  1e-10
 %       Kvaerno(5,3,4)-ESDIRK  |  5 |  4   4   Y          |  3   3   Y          |  2  1e-14
 %           Cash(5,2,4)-SDIRK  |  5 |  4   4   Y       Y  |  2   2   Y          |  1  1e-10
-%           ESDIRK4(3)6L[2]SA  |  6 |  4   4   Y       Y  |  3   3   Y          |  2  1e-26
-%           ESDIRK4(3)7L[2]SA  |  7 |  4   4   Y       Y  |  3   3   Y          |  2  1e-25
-%          ESDIRK4(3I)6L[2]SA  |  6 |  4   4   Y       Y  |  3   3   Y          |  2  1e-25
-%          QESDIRK4(3)6L[2]SA  |  6 |  4   4   Y       Y  |  3   3   Y          |  2  1e-25
+%           ESDIRK4(3)6L[2]SA  |  6 |  4   4   Y       Y  |  3   3   Y       Y  |  2  1e-26
+%           ESDIRK4(3)7L[2]SA  |  7 |  4   4   Y       Y  |  3   3   Y       Y  |  2  1e-25
+%          ESDIRK4(3I)6L[2]SA  |  6 |  4   4   Y       Y  |  3   3   Y       Y  |  2  1e-25
+%          QESDIRK4(3)6L[2]SA  |  6 |  4   4   Y       Y  |  3   3   Y       Y  |  2  1e-25
 %       ARK4(3)6L[2]SA-ESDIRK  |  6 |  4   4   Y       Y  |  3   3   Y          |  2  1e-40
-%       ARK4(3)7L[2]SA-ESDIRK  |  7 |  4   4   Y       Y  |  3   3   Y          |  2  1e-25
-%           ESDIRK5(3)6L[2]SA  |  6 |  5   5   Y       Y  |  3   3   Y          |  2  1e-25
-%           ESDIRK5(4)7L[2]SA  |  7 |  5   5   Y       Y  |  4   4   Y          |  2  1e-26
+%       ARK4(3)7L[2]SA-ESDIRK  |  7 |  4   4   Y       Y  |  3   3   Y       Y  |  2  1e-25
+%           ESDIRK5(3)6L[2]SA  |  6 |  5   5   Y       Y  |  3   3   Y       Y  |  2  1e-25
+%           ESDIRK5(4)7L[2]SA  |  7 |  5   5   Y       Y  |  4   4   Y       Y  |  2  1e-26
 %          ESDIRK5(4)7L[2]SA2  |  7 |  5   5   Y       Y  |  4   4   Y          |  2  1e-26
 %           ESDIRK5(4)8L[2]SA  |  8 |  5   5   Y       Y  |  1   1              |  2  1e-25
 %       ARK5(4)8L[2]SA-ESDIRK  |  8 |  5   5   Y       Y  |  4   4   Y          |  2  1e-25
@@ -1013,7 +1018,7 @@ elseif (strcmp(method_name,'Cooper6-ERK'))
 elseif (strcmp(method_name,'Cooper6-ESDIRK'))
 
    beta = v(1.0685790213);
-   c = [z; v(1)/v(2); v(1)/v(2); v(1)/v(2); 1; 1];
+   c = [z; v(1)/v(2); v(1)/v(2); v(1)/v(2); v(1); v(1)];
    b = [v(1)/v(6), z, z, v(2)/v(3), v(1)/v(6), z];
    A = [z, z, z, z, z, z;
         (v(1)-v(2)*beta)/v(2), beta, z, z, z, z;
@@ -1122,8 +1127,6 @@ elseif (strcmp(method_name,'SSP(10,2)-ERK'))
 
 elseif (strcmp(method_name,'SSP(4,3)-ERK'))
 
-   n=v(2);
-   s=v(4);
    A = [ z, z, z, z;
          v(1)/v(2), z, z, z;
          v(1)/v(2), v(1)/v(2), z, z;
@@ -1132,6 +1135,39 @@ elseif (strcmp(method_name,'SSP(4,3)-ERK'))
    b2 = [ v(1)/v(4), v(1)/v(4), v(1)/v(4), v(1)/v(4)];
    %b2 = [ v(1)/v(3), v(1)/v(3), v(1)/v(3), z];
    c = sum(A,2);
+   q = 3;
+   p = 2;
+   B = [c, A; q, b; p, b2];
+
+elseif (strcmp(method_name,'SSP(4,3)-ESDIRK'))
+
+   sq3 = sqrt(v(3));
+   gam = (v(3) + sq3)/v(6);
+   A = [ z, z, z, z;
+         -sq3/v(6), gam, z, z;
+         (v(3) + sq3)/v(3), -(v(1)+sq3)/v(2), gam, z;
+         v(1)/v(6), -(v(1)+sq3)/v(6), z, gam];
+   b = [ v(1)/v(6), v(1)/v(6), v(1)/v(6), v(1)/v(2)];
+   b2 = [ v(1)/v(4), v(1)/v(4), v(1)/v(4), v(1)/v(4)];
+   c = sum(A,2);
+   q = 3;
+   p = 2;
+   B = [c, A; q, b; p, b2];
+
+elseif (strcmp(method_name,'SSP(9,3)-DIRK'))
+
+   A = [ z, z, z, z, z, z, z, z, z;
+         -v(2)/v(15), v(3)/v(10), z, z, z, z, z, z, z;
+         -v(1)/v(6), v(1)/v(2), z, z, z, z, z, z, z;
+         z, v(1)/v(2), z, z, z, z, z, z, z;
+         -v(2)/v(15), v(1)/v(2), z, z, v(3)/v(10), z, z, z, z;
+         v(10750067225)/v(15104505504), v(1)/v(2), z, z, -v(5715232057)/v(15104505504), z, z, z, z;
+         v(211)/v(2178), v(17)/v(5445), z, z, v(1)/v(10), z, v(3)/v(10), z, z;
+         v(16853104507)/v(56641895640), v(17)/v(5445), z, z, v(1)/v(10), z, v(2767149)/v(10402552), z, z;
+         v(1860170351)/v(11328379128), v(17)/v(5445), z, z, v(1)/v(10), z, v(2767149)/v(10402552), z, v(3)/v(10)];
+   b = [ v(3130013)/v(1058750), -v(46374583)/v(9528750), z, z, v(3281263)/v(1361250), z, v(6789401)/v(3176250), z, -v(2600638)/v(1588125) ];
+   b2 = [ v(2941)/v(30250), v(7251)/v(30250), z, z, v(933)/v(1210), z, -v(27)/v(250), z, z ];
+   c = [ z; v(1)/v(6); v(1)/v(3); v(1)/v(2); v(2)/v(3); v(5)/v(6); v(1)/v(2); v(2)/v(3); v(5)/v(6)];
    q = 3;
    p = 2;
    B = [c, A; q, b; p, b2];
@@ -2021,14 +2057,18 @@ elseif (strcmp(method_name,'ARK(2,3,2)-ERK'))
    alpha = v(1)/v(6) * (v(3)+v(2)*sqrt(v(2)));
    delta = v(1)/(v(2)*sqrt(v(2)));
    twogamma = v(2) * gamma;
+   beta = (v(4) - sqrt(v(2))) / v(8);
+
 
    A = [z,         z,     z; ...
         twogamma,  z,     z; ...
         v(1) - alpha, alpha, z];
    b = [delta, delta, gamma];
+   b2 = [beta, beta, v(1) / (v(2) * sqrt(v(2)))];
    c = [z; twogamma; v(1)];
    q = 2;
-   B = [c, A; q, b];
+   p = 1;
+   B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ARK(2,3,2)-SDIRK'))
 
@@ -2036,14 +2076,17 @@ elseif (strcmp(method_name,'ARK(2,3,2)-SDIRK'))
    alpha = v(1)/v(6) * (v(3)+v(2)*sqrt(v(2)));
    delta = v(1)/(v(2)*sqrt(v(2)));
    twogamma = v(2) * gamma;
+   beta = (v(4) - sqrt(v(2))) / v(8);
 
    A = [z,     z,     z; ...
         gamma, gamma, z; ...
         delta, delta, gamma];
    b = [delta, delta, gamma];
+   b2 = [beta, beta, v(1) / (v(2) * sqrt(v(2)))];
    c = [z; twogamma; v(1)];
    q = 2;
-   B = [c, A; q, b];
+   p = 1;
+   B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP2(2,2,2)-ERK'))
   % explicit portion of IMEX-SSP2(2,2,2) from https://doi.org/10.1007/BF02728986
@@ -2133,9 +2176,11 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-ERK'))
           v(5)/v(6),     z, z;...
         v(11)/v(24), v(11)/v(24), z];
    b = [v(24)/v(55), v(1)/v(5), v(4)/v(11)];
+   b2 = [v(4247)/v(9840), v(21343)/v(108240), v(49)/v(132)];
    c = [z; v(5)/v(6); v(11)/v(12)];
    q = 2;
-   B = [c, A; q, b];
+   p = 1;
+   B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-SDIRK'))
 
@@ -2143,9 +2188,37 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-SDIRK'))
              v(205)/v(462),   v(2)/v(11),    z;...
            v(2033)/v(4620), v(21)/v(110), v(2)/v(11)];
    b = [v(24)/v(55), v(1)/v(5), v(4)/v(11)];
+   b2 = [v(4247)/v(9840), v(21343)/v(108240), v(49)/v(132)];
    c = [v(2)/v(11); v(289)/v(462); v(751)/v(924)];
    q = 2;
-   B = [c, A; q, b];
+   p = 1;
+   B = [c, A; q, b; p, b2];
+
+elseif (strcmp(method_name, 'SSP2(3,3,2)-lum-ERK'))
+  % explicit portion of IMEX-SSP2(3,3,2)-LUM from https://doi.org/10.1137/040612968
+
+   A = [        z,      z,    z;...
+             v(1)/v(2),   z,    z;...
+             v(1)/v(2), v(1)/v(2), z];
+   b = [v(1)/v(3), v(1)/v(3), v(1)/v(3)];
+   b2 = [v(4)/v(9), v(1)/v(3), v(2)/v(9)];
+   c = [z; v(1)/v(2); v(1)];
+   q = 2;
+   p = 1;
+   B = [c, A; q, b; p, b2];
+
+elseif (strcmp(method_name, 'SSP2(3,3,2)-lum-DIRK'))
+  % implicit portion of IMEX-SSP2(3,3,2)-LUM from https://doi.org/10.1137/040612968
+
+   A = [        v(1)/v(5),      z,    z;...
+             v(1)/v(10),   v(1)/v(5),    z;...
+             v(1)/v(3), v(1)/v(3), v(1)/v(3)];
+   b = [v(1)/v(3), v(1)/v(3), v(1)/v(3)];
+   b2 = [v(37)/v(90), v(41)/v(180), v(13)/v(36)];
+   c = [v(1)/v(5); v(3)/v(10); v(1)];
+   q = 2;
+   p = 1;
+   B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name, 'SSP2(3,3,2)-lum-ERK'))
   % explicit portion of IMEX-SSP2(3,3,2)-LUM from https://doi.org/10.1137/040612968
@@ -2352,8 +2425,8 @@ elseif (strcmp(method_name,'Giraldo-ARK2-ERK'))
    b = [ v(1)/sqrt(v(8)), v(1)/sqrt(v(8)), v(1)-v(1)/sqrt(v(2))];
    b2 = [(v(4)-sqrt(v(2)))/v(8), (v(4)-sqrt(v(2)))/v(8), v(1)/sqrt(v(8))];
    c = [ z; v(2)-sqrt(v(2)); v(1)];
-   q = 3;
-   p = 2;
+   q = 2;
+   p = 1;
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Giraldo-ARK2-ESDIRK'))
@@ -2366,8 +2439,8 @@ elseif (strcmp(method_name,'Giraldo-ARK2-ESDIRK'))
    b = [ v(1)/sqrt(v(8)), v(1)/sqrt(v(8)), v(1)-v(1)/sqrt(v(2))];
    b2 = [(v(4)-sqrt(v(2)))/v(8), (v(4)-sqrt(v(2)))/v(8), v(1)/sqrt(v(8))];
    c = [ z; v(2)-sqrt(v(2)); v(1)];
-   q = 3;
-   p = 2;
+   q = 2;
+   p = 1;
    B = [c, A; q, b; p, b2];
 
 else
