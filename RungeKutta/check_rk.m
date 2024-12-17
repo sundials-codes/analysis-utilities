@@ -180,9 +180,9 @@ if (doPlot)
    xl = box(1:2);  yl = box(3:4);
    xax = plot(linspace(xl(1),xl(2),10),zeros(1,10),'k:'); hold on
    yax = plot(zeros(1,10),linspace(yl(1),yl(2),10),'k:');
-   stab_region(double(A),double(b),box,fig,'r-');  % method
+   stab_region(double(A),double(b),box,fig,'r-','method');  % method
    if (embedded)
-      stab_region(double(A),double(d),box,fig,'b--');  % embedding
+      stab_region(double(A),double(d),box,fig,'b--','embedding');  % embedding
    end
    set(get(get(xax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
    set(get(get(yax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
@@ -190,11 +190,14 @@ if (doPlot)
    xlabel('Re(z)')
    ylabel('Im(z)')
    if (embedded)
-%      title(sprintf('%s stability regions, order %i',mname,q))
-      title(sprintf('Stability boundary for %s method',mname))
-      legend('method','embedding')
+      title(sprintf('Linear stability for %s method',mname))
+      lgd = legend;
+      s = lgd.String;
+      for i=2:length(s)-1
+        s{i} = '';
+      end
+      legend(s);
    else
-%      title(sprintf('%s stability region, order %i',mname,q))
       title(sprintf('Stability boundary for %s method',mname))
    end
    print(sprintf('%s_stab_region.png', fname), '-dpng');

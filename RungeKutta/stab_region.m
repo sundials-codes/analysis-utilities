@@ -1,5 +1,5 @@
-function stab_region(A,b,box,fig,fmt)
-% Usage: stab_region(A,b,box,fig,fmt)
+function stab_region(A,b,box,fig,fmt,ltext)
+% Usage: stab_region(A,b,box,fig,fmt,ltext)
 %
 % Inputs:
 %    A is a Butcher table matrix
@@ -8,6 +8,7 @@ function stab_region(A,b,box,fig,fmt)
 %          of the complex plane in which to perform the test
 %    fig = figure handle to use
 %    fmt = plot format string to use
+%    ltext = text to use in the legend
 %
 % We consider the RK stability function
 %    R(eta) = 1 + eta*b'*((I-eta*A)\e)
@@ -61,7 +62,7 @@ while idx < size(c,2)
   cols = idx+1:idx+c(2,idx);
   X = c(1,cols);
   Y = c(2,cols);
-  plot(X, Y, fmt)
+  plot(X, Y, fmt, 'DisplayName', ltext)
   idx = idx + c(2,idx) + 1;
 end
 hold off
