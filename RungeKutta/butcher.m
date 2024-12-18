@@ -2171,6 +2171,7 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lpum-SDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-ERK'))
+  % explicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1137/040612968
 
    A = [    z,     z, z;...
           v(5)/v(6),     z, z;...
@@ -2183,6 +2184,7 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-SDIRK'))
+  % implicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1137/040612968
 
    A = [        v(2)/v(11),      z,    z;...
              v(205)/v(462),   v(2)/v(11),    z;...
