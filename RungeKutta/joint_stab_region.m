@@ -134,7 +134,8 @@ for itheta = 1:length(thetas)
     cols = idx+1:idx+c(2,idx);
     X = c(1,cols);
     Y = c(2,cols);
-    plot(X, Y, 'color', CM(itheta,:), 'DisplayName', sprintf('theta = %g', thetas(itheta)))
+    lstring = ['$\theta =\;$', sprintf('%g', thetas(itheta))];
+    plot(X, Y, 'color', CM(itheta,:), 'DisplayName', lstring)
     idx = idx + c(2,idx) + 1;
   end
   hold off
@@ -148,7 +149,7 @@ axis(box);
 xlabel('Re(zE)');
 ylabel('Im(zE)');
 %legend(arrayfun(@(th) sprintf('theta = %g', th), thetas, 'UniformOutput', false),'Location', 'northwest')
-legend('Location', 'northwest');
+legend('Location', 'northwest', 'Interpreter', 'latex');
 hold off
 
 
