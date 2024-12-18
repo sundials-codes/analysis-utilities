@@ -116,18 +116,18 @@ end
 [q,lq] = table_order(c,A,b,tol,reportL);
 [As,Bs,Ls] = stability(A,b,StabTol);
 
-% check for SSP coefficient of method
-try
-  ssp = ssp_coefficient(double(A), double(b));
-catch
-  ssp = -1;
-end
-
 % report on method
 if (reportL>0)
+   % check for SSP coefficient of method
+   try
+      ssp = ssp_coefficient(double(A), double(b));
+   catch
+      ssp = -1;
+   end
+
    fprintf('  %s stage order = %i\n', mname, qs);
    if (ssp > 0)
-      fprintf('    method:    q = %i,  lq = %i,  As = %i,  Bs = %i,  Ls = %i,  SA = %i, SSP = %g\n', ...
+      fprintf('    method:    q = %i,  lq = %i,  As = %i,  Bs = %i,  Ls = %i,  SA = %i,  SSP = %g\n', ...
               q, lq, As, Bs, Ls, SA, ssp);
    else
       fprintf('    method:    q = %i,  lq = %i,  As = %i,  Bs = %i,  Ls = %i,  SA = %i\n', ...
@@ -140,8 +140,20 @@ if (embedded)
    [p,lp] = table_order(c,A,d,tol,reportL);
    [AsE,BsE,LsE] = stability(A,d,StabTol);
    if (reportL>0)
-      fprintf('    embedding: p = %i,  lp = %i,  As = %i,  Bs = %i,  Ls = %i\n', ...
-              p, lp, AsE, BsE, LsE);
+      % check for SSP coefficient of embedding
+      try
+         ssp = ssp_coefficient(double(A), double(d));
+      catch
+         ssp = -1;
+      end
+
+      if (ssp > 0)
+         fprintf('    embedding: p = %i,  lp = %i,  As = %i,  Bs = %i,  Ls = %i,  SSP = %g\n', ...
+                 p, lp, AsE, BsE, LsE, ssp);
+      else
+         fprintf('    embedding: p = %i,  lp = %i,  As = %i,  Bs = %i,  Ls = %i\n', ...
+                 p, lp, AsE, BsE, LsE);
+      end
    end
 else
    p = 0;

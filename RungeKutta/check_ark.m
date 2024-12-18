@@ -2115,21 +2115,19 @@ if (~failed || ~failE || ~failI)
 end
 
 
-% determine SSP coefficients for component methods
-try
-  ERK_ssp = ssp_coefficient(double(AE), double(bE));
-catch
-  ERK_ssp = -1;
-end
-try
-  DIRK_ssp = ssp_coefficient(double(AI), double(bI));
-catch
-  DIRK_ssp = -1;
-end
-
-
 % report
 if (reportL>0)
+   % determine SSP coefficients for component methods
+   try
+      ERK_ssp = ssp_coefficient(double(AE), double(bE));
+   catch
+      ERK_ssp = -1;
+   end
+   try
+      DIRK_ssp = ssp_coefficient(double(AI), double(bI));
+   catch
+      DIRK_ssp = -1;
+   end
    fprintf('  Overall results:\n');
    fprintf('    ERK:  order = %i,  stage order = %i,  stiffly accurate = %i,  SSP coeff = %g\n', qE,qsE,expSA,ERK_ssp);
    fprintf('    DIRK: order = %i,  stage order = %i,  stiffly accurate = %i,  SSP coeff = %g\n', qI,qsI,impSA,DIRK_ssp);

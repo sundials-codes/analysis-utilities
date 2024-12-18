@@ -4156,31 +4156,30 @@ if (~failed || ~failE || ~failI)
 end
 
 
-% determine SSP coefficients for component methods and embeddings
-try
-  ERK_ssp = ssp_coefficient(double(AE), double(bE));
-catch
-  ERK_ssp = -1;
-end
-try
-  ERKembed_ssp = ssp_coefficient(double(AE), double(dE));
-catch
-  ERKembed_ssp = -1;
-end
-try
-  DIRK_ssp = ssp_coefficient(double(AI), double(bI));
-catch
-  DIRK_ssp = -1;
-end
-try
-  DIRKembed_ssp = ssp_coefficient(double(AI), double(dI));
-catch
-  DIRKembed_ssp = -1;
-end
-
-
 % report
 if (reportL>0)
+   % determine SSP coefficients for component methods and embeddings
+   try
+      ERK_ssp = ssp_coefficient(double(AE), double(bE));
+   catch
+      ERK_ssp = -1;
+   end
+   try
+      ERKembed_ssp = ssp_coefficient(double(AE), double(dE));
+   catch
+      ERKembed_ssp = -1;
+   end
+   try
+      DIRK_ssp = ssp_coefficient(double(AI), double(bI));
+   catch
+      DIRK_ssp = -1;
+   end
+   try
+      DIRKembed_ssp = ssp_coefficient(double(AI), double(dI));
+   catch
+      DIRKembed_ssp = -1;
+   end
+
    fprintf('  Overall results:\n');
    fprintf('    ERK:   order = %i,  embed order = %i,  stage order = %i,  stiffly accurate = %i,  SSP coeff = %g,  embed SSP = %g\n', ...
            qE, pE, qsE, expSA, ERK_ssp, ERKembed_ssp);
