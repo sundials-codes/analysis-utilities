@@ -7,7 +7,7 @@ function [A,b,c] = rkc_butcher_coeffs(rho,symbolic)
   % instead of double precision.
 
   % determine minimum number of stages to evaluate
-  s = ceil(sqrt(abs(rho)/0.653));
+  s = max(2,ceil(sqrt(abs(rho)/0.653))+1);
 
   if (symbolic)
     v = @(x) sym(x);
