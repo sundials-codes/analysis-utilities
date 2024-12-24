@@ -116,14 +116,14 @@ if (do_imex)
            {'SSP(2,2)-ERK',          'SSP(2,2)-SDIRK',          'SSP-ARK-2-1-2',        'ARKODE_SSP_ARK_2_1_2',       [-2.5,0.5,-2.5,2.5]},
            {'Ascher(2,2,2)-ERK',     'Ascher(2,2,2)-SDIRK',     'ASCHER-ARK-3-1-2',     'ARKODE_ASCHER_ARK_3_1_2',    [-2.5,0.5,-2.5,2.5]},
            {'SSP(3,2)-ERK',          'SSP(3,2)-DIRK',           'SSP-ARK-3-1-2',        'ARKODE_SSP_ARK_3_1_2',       [-5,0.5,-3.5,3.5]},
-           {'SSP2(3,3,2)-lspum-ERK', 'SSP2(3,3,2)-lspum-SDIRK', 'SSP-LSPUM-ARK-3-1-2', 'ARKODE_SSP_LSPUM_ARK_3_1_2', [-3.5,0.5,-3.5,3.5]},
-           {'Giraldo-ARK2-ERK',      'Giraldo-ARK2-ESDIRK',     'ARK2-3-1-2',            'ARKODE_ARK2_3_1_2',          [-2,0.5,-2,2]},
+           {'SSP2(3,3,2)-lspum-ERK', 'SSP2(3,3,2)-lspum-SDIRK', 'SSP-LSPUM-ARK-3-1-2',  'ARKODE_SSP_LSPUM_ARK_3_1_2', [-3.5,0.5,-3.5,3.5]},
+           {'Giraldo-ARK2-ERK',      'Giraldo-ARK2-ESDIRK',     'ARK2-3-1-2',           'ARKODE_ARK2_3_1_2',          [-2,0.5,-2,2]},
            {'SSP(4,3)-ERK',          'SSP(4,3)-ESDIRK',         'SSP-ARK-4-2-3',        'ARKODE_SSP_ARK_4_2_3',       [-3.5,0.5,-2.5,2.5]},
-           {'ARK3(2)4L[2]SA-ERK',    'ARK3(2)4L[2]SA-ESDIRK',   'ARK324L2SA-4-2-3',      'ARKODE_ARK324L2SA_4_2_3',    [-4,0.5,-4,4]},
-           {'ARK4(3)6L[2]SA-ERK',    'ARK4(3)6L[2]SA-ESDIRK',   'ARK436L2SA-6-3-4',      'ARKODE_ARK436L2SA_6_3_4',    [-5,1,-5,5]},
-           {'ARK4(3)7L[2]SA-ERK',    'ARK4(3)7L[2]SA-ESDIRK',   'ARK437L2SA-7-3-4',      'ARKODE_ARK437L2SA_7_3_4',    [-4,0.5,-3,3]},
-           {'ARK5(4)8L[2]SA-ERK',    'ARK5(4)8L[2]SA-ESDIRK',   'ARK548L2SA-8-4-5',      'ARKODE_ARK548L2SA_8_4_5',    [-5,1,-4,4]},
-           {'ARK5(4)8L[2]SAb-ERK',   'ARK5(4)8L[2]SAb-ESDIRK',  'ARK548L2SAb-8-4-5',     'ARKODE_ARK548L2SAb_8_4_5',   [-5,1,-4,4]},
+           {'ARK3(2)4L[2]SA-ERK',    'ARK3(2)4L[2]SA-ESDIRK',   'ARK324L2SA-4-2-3',     'ARKODE_ARK324L2SA_4_2_3',    [-4,0.5,-4,4]},
+           {'ARK4(3)6L[2]SA-ERK',    'ARK4(3)6L[2]SA-ESDIRK',   'ARK436L2SA-6-3-4',     'ARKODE_ARK436L2SA_6_3_4',    [-5,1,-5,5]},
+           {'ARK4(3)7L[2]SA-ERK',    'ARK4(3)7L[2]SA-ESDIRK',   'ARK437L2SA-7-3-4',     'ARKODE_ARK437L2SA_7_3_4',    [-4,0.5,-3,3]},
+           {'ARK5(4)8L[2]SA-ERK',    'ARK5(4)8L[2]SA-ESDIRK',   'ARK548L2SA-8-4-5',     'ARKODE_ARK548L2SA_8_4_5',    [-5,1,-4,4]},
+           {'ARK5(4)8L[2]SAb-ERK',   'ARK5(4)8L[2]SAb-ESDIRK',  'ARK548L2SAb-8-4-5',    'ARKODE_ARK548L2SAb_8_4_5',   [-5,1,-4,4]},
      };
 
   fprintf('                             |     | Method | Embedding |\n');

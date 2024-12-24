@@ -62,7 +62,7 @@ while idx < size(c,2)
   cols = idx+1:idx+c(2,idx);
   X = c(1,cols);
   Y = c(2,cols);
-  plot(X, Y, fmt, 'DisplayName', ltext)
+  plot(X, Y, fmt, 'DisplayName', ltext, 'LineWidth', 2)
   idx = idx + c(2,idx) + 1;
 end
 hold off

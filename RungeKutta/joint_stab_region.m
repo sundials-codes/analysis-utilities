@@ -135,7 +135,7 @@ for itheta = 1:length(thetas)
     X = c(1,cols);
     Y = c(2,cols);
     lstring = ['$\theta =\;$', sprintf('%g', thetas(itheta))];
-    plot(X, Y, 'color', CM(itheta,:), 'DisplayName', lstring)
+    plot(X, Y, 'color', CM(itheta,:), 'DisplayName', lstring, 'LineWidth', 2)
     idx = idx + c(2,idx) + 1;
   end
   hold off

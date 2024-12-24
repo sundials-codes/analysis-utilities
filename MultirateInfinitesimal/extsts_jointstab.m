@@ -102,9 +102,8 @@ function [xgrid,ygrid,Rmax] = extsts_jointstab(Ai,Ae,DMethod,maxtheta,maxrho,num
       end
       count = count + 1;
       if(mod(count,floor(totalcount/10))==0)
-        % fprintf('count = %i, b = %i, totalcount = %i\n',count,floor(totalcount/10),totalcount);
         percentdone = floor(count*100/(totalcount));
-        fprintf('completed = %g, %g percent \n',count,percentdone);
+        fprintf('  completed %g of %g (%g%%). ', count, totalcount, percentdone);
         toc
       end
     end
@@ -112,8 +111,7 @@ function [xgrid,ygrid,Rmax] = extsts_jointstab(Ai,Ae,DMethod,maxtheta,maxrho,num
   end
 
   % output some statistics regarding Rmax
-  fprintf("Rmax: max = %g, min = %g, avg = %g\n", max(max(Rmax)), min(min(Rmax)), sum(sum(Rmax))/length(Rmax));
-
-  toc
+  fprintf("Rmax: max = %g, min = %g, avg = %g. ", max(max(Rmax)), min(min(Rmax)), mean(Rmax, 'all'));
+  toc; fprintf("\n");
 
 end

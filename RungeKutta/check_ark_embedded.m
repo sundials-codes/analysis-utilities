@@ -4191,8 +4191,10 @@ if (reportL>0)
 end
 
 
-% generate plot of stability regions
+% generate plots of stability regions
 if (doPlot)
+
+   % joint stability region
    fig = figure();
    xl = box(1:2);  yl = box(3:4);
    xax = plot( linspace(xl(1),xl(2),10), zeros(1,10), 'k:'); hold on
@@ -4217,6 +4219,34 @@ if (doPlot)
    print(sprintf('%s_joint_stab_region.png', fname), '-dpng');
    print(sprintf('%s_joint_stab_region.eps', fname), '-depsc');
    savefig(sprintf('%s_joint_stab_region.fig', fname));
+
+   % individual stability regions
+   fig = figure();
+   xl = box(1:2);  yl = box(3:4);
+   xax = plot(linspace(xl(1),xl(2),10),zeros(1,10),'k:'); hold on
+   yax = plot(zeros(1,10),linspace(yl(1),yl(2),10),'k:');
+   stab_region(double(AE),double(bE),box,fig,'r-','ERK method');  % explicit method
+   stab_region(double(AI),double(bI),box,fig,'b-','DIRK method');  % implicit method
+   stab_region(double(AE),double(dE),box,fig,'g-','ERK embedding');  % explicit embedding
+   stab_region(double(AI),double(dI),box,fig,'m-','DIRK embedding');  % implicit embedding
+   set(get(get(xax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
+   set(get(get(yax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
+   axis(box)
+   xlabel('Re(z)')
+   ylabel('Im(z)')
+   title(sprintf('%s linear stability regions',mname))
+   lgd = legend;
+   s = lgd.String;
+   for i=5:length(s)-1
+     s{i} = '';
+   end
+   legend(s);
+   print(sprintf('%s_stab_regions.png', fname), '-dpng');
+   print(sprintf('%s_stab_regions.eps', fname), '-depsc');
+   savefig(sprintf('%s_stab_regions.fig', fname));
+end
+
+
 end
 
 % end of function
