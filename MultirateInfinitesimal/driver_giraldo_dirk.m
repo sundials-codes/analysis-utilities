@@ -3,7 +3,7 @@ function driver_giraldo_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
   addpath('../RungeKutta')
 
   % shared plotting information
-  box = [-3,0.5,-3,3];
+  box = [-5,25,-15,15];
   mname = 'Giraldo-DIRK2';
   fname = 'GiraldoDIRK2';
 
@@ -32,12 +32,13 @@ function driver_giraldo_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
 
   % verify properties and generate plots of ImEx-ARK method
   if (plotRK)
-    disp('checking DIRK method properties')
-    check_rk(c,Ai,bi,di,1,true,box,mname,fname);
+    fprintf('\nChecking DIRK method properties for %s method\n', mname)
+    check_rk(Bi,1,true,box,mname,fname);
   end
 
   % generate joint stability plot for this as an ImEx-MRI-GARK method
   if (plotMRI)
+    fprintf('\nPlotting MRI joint stability region for %s method\n', mname)
 
     % convert Butcher table to MRI "Omega" matrix
     [cmri, Gmri] = mis_to_mri(Bi);
@@ -116,17 +117,17 @@ function driver_giraldo_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
 
   % generate joint stability plot for this as an ExtSTS method
   if (plotExtSTS)
+    fprintf('\nPlotting ExtSTS joint stability region for %s method\n', mname)
 
     % test parameters
-    box = [-1.5,0.5,-2,2];
-    %thetavals = [10,30,45,60,80,90];
-    thetavals = [0,30,45,60,90];
-    %numRay = 25;
-    numRay = 10;
-    maxRho = 1e2;
-    %numGrid = 200;
+    box = [-5,110,-55,55];
+    thetavals = [0];  % maxRxAngle values
+    numDiff = 3;
+    maxDiff = 1e2;
+    numRxRadii = 1;
+    numRxAngle = 1;
+    maxRxRadius = 1;
     numGrid = 60;
-    numAngle = 2;
     header = {};
     plotcolors = {[0 0.4470 0.7410],[0.8500 0.3250 0.0980],[0.4940 0.1840 0.5560], ...
                   [0.4660 0.6740 0.1880],[0.3010 0.7450 0.9330],[0.6350 0.0780 0.1840]};
@@ -137,21 +138,24 @@ function driver_giraldo_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     q = matfile(filename,'Writable',true);
     q.box = box;
     q.thetavals = thetavals;
-    q.numRay = numRay;
-    q.maxRho = maxRho;
-    q.numAngle = numAngle;
+    q.numDiff = numDiff;
+    q.maxDiff = maxDiff;
+    q.numRxRadii = numRxRadii;
+    q.numRxAngle = numRxAngle;
+    q.maxRxRadius = maxRxRadius;
     q.numGrid = numGrid;
-    figure
+    fig = figure;
+    stab_region(double(Ai),double(bi),box,fig,'k--','base');  % base method stability region
     hold on
 
     for itheta = 1:length(thetavals)
       maxTheta = thetavals(itheta);
-      [xgrid,ygrid,Rmax] = extsts_jointstab(Ai, Ae, 'RKC', maxTheta, maxRho, numRay, numAngle, box, numGrid);
+      RxParams = [maxTheta, numRxAngle, maxRxRadius, numRxRadii];
+      DiffParams = [maxDiff, numDiff];
+      [xgrid,ygrid,Rmax] = extsts_jointstab(Ai, Ae, 'RKC', RxParams, DiffParams, box, numGrid);
       R{itheta} = Rmax;
       contour(xgrid, ygrid, Rmax', [1+eps,1+eps], 'color', plotcolors{itheta}, 'LineStyle', ...
               plotlinestyle{itheta}, 'LineWidth', 2);
-      header{itheta} = [num2str(maxTheta),char(176)];
-      hold on
     end
 
     q.R = R;
@@ -162,11 +166,10 @@ function driver_giraldo_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     xax = plot( linspace(xl(1),xl(2),10), zeros(1,10), 'k:');
     yax = plot( zeros(1,10), linspace(yl(1),yl(2),10), 'k:');
     hold off
-    tstring = [mname,' ExtSTS method with RKC'];
+    tstring = ['ExtSTS joint stability -- ', mname,' + RKC'];
     title(tstring);
-    lgd = legend(header);
+    lgd = legend('Base','ExtSTS');
     lgd.Location = 'best';
-    lgd.Title.String = '\theta values';
 
     plotfile = ['extsts_',fname,'_rkc'];
     print('-dpng',plotfile);
@@ -178,21 +181,24 @@ function driver_giraldo_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     q = matfile(filename,'Writable',true);
     q.box = box;
     q.thetavals = thetavals;
-    q.numRay = numRay;
-    q.maxRho = maxRho;
-    q.numAngle = numAngle;
+    q.numDiff = numDiff;
+    q.maxDiff = maxDiff;
+    q.numRxRadii = numRxRadii;
+    q.numRxAngle = numRxAngle;
+    q.maxRxRadius = maxRxRadius;
     q.numGrid = numGrid;
-    figure
+    fig = figure;
+    stab_region(double(Ai),double(bi),box,fig,'k--','base');  % base method stability region
     hold on
 
     for itheta = 1:length(thetavals)
       maxTheta = thetavals(itheta);
-      [xgrid,ygrid,Rmax] = extsts_jointstab(Ai, Ae, 'RKL', maxTheta, maxRho, numRay, numAngle, box, numGrid);
+      RxParams = [maxTheta, numRxAngle, maxRxRadius, numRxRadii];
+      DiffParams = [maxDiff, numDiff];
+      [xgrid,ygrid,Rmax] = extsts_jointstab(Ai, Ae, 'RKL', RxParams, DiffParams, box, numGrid);
       R{itheta} = Rmax;
       contour(xgrid, ygrid, Rmax', [1+eps,1+eps], 'color', plotcolors{itheta}, 'LineStyle', ...
               plotlinestyle{itheta}, 'LineWidth', 2);
-      header{itheta} = [num2str(maxTheta),char(176)];
-      hold on
     end
 
     q.R = R;
@@ -203,11 +209,10 @@ function driver_giraldo_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     xax = plot( linspace(xl(1),xl(2),10), zeros(1,10), 'k:');
     yax = plot( zeros(1,10), linspace(yl(1),yl(2),10), 'k:');
     hold off
-    tstring = [mname,' ExtSTS method with RKL'];
+    tstring = ['ExtSTS joint stability -- ', mname,' + RKL'];
     title(tstring);
-    lgd = legend(header);
+    lgd = legend('Base','ExtSTS');
     lgd.Location = 'best';
-    lgd.Title.String = '\theta values';
 
     plotfile = ['extsts_',fname,'_rkl'];
     print('-dpng',plotfile);
