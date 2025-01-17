@@ -63,7 +63,7 @@ function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
     dc = [0; c(2:end)-c(1:end-1)];
 
     % test parameters
-    thetavals = [10,30,45,60,80,90];
+    thetavals = [20,40,60,80];
     numRay = 25;
     numGrid = 200;
     numAngle = 2;
@@ -127,10 +127,10 @@ function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
     fprintf('\nPlotting ExtSTS joint stability region for %s method\n', mname)
 
     % test parameters
-    %thetavals = [10,30,45,60,80,90];  % maxRxAngle values
-    thetavals = [0,30,45,60,90];  % maxRxAngle values
+    thetavals = [20,40,60,80];
     numDiff = 3;
-    maxDiff = 1e2;
+    %maxDiff = 1e2;
+    maxDiff = 1e6;
     numRxRadii = 3;
     numRxAngle = 2;
     maxRxRadius = 1e2;

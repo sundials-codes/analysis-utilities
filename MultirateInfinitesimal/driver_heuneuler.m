@@ -117,7 +117,8 @@ function driver_heuneuler(maxAlpha,plotRK,plotMRI,plotExtSTS)
     % test parameters
     thetavals = [0];  % maxRxAngle values
     numDiff = 3;
-    maxDiff = 1e2;
+    %maxDiff = 1e2;
+    maxDiff = 1e6;
     numRxRadii = 1;
     numRxAngle = 1;
     maxRxRadius = 1;

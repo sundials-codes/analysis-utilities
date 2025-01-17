@@ -121,7 +121,8 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     box = [-2.5,0.5,-2.5,2.5];
     thetavals = [0];  % maxRxAngle values
     numDiff = 3;
-    maxDiff = 1e2;
+    %maxDiff = 1e2;
+    maxDiff = 1e6;
     numRxRadii = 1;
     numRxAngle = 1;
     maxRxRadius = 1;

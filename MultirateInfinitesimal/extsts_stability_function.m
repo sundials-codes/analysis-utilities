@@ -39,24 +39,6 @@ function Rval = extsts_stability_function(Ai, Ae, DMethod, etaR, etaA, etaD)
 
   Rval = es' * ((eye(s) - P - Q*(etaR*Ai + etaA*Ae))\e1);
 
-  % % build up the stability function stage-by-stage
-  % z = zeros(s,1);
-  % z(1) = 1;
-  % for i=2:s
-  %   r = 0;
-  %   for j=1:i-1
-  %     r = r + ((Ai(i,j)-Ai(i-1,j))*etaR + (Ae(i,j)-Ae(i-1,j))*etaA)*z(j);
-  %   end
-  %   if (abs(dc(i)) < sqrt(eps))
-  %     z(i) = fast_stability(DMethod, dc(i)*etaD, z(i-1), r);
-  %   else
-  %     z(i) = (z(i-1)+r)/(1 - etaR*(Ai(i,i)-Ai(i-1,i)));
-  %   end
-  % end
-
-  % % result is the final "stage"
-  % Rval = z(s);
-
 end
 
 %%% internal utility routine %%%

@@ -120,12 +120,12 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     fprintf('\nPlotting ExtSTS joint stability region for %s method\n', mname)
 
     % test parameters
-    box = [-5,15,-10,10];
-    thetavals = [0];  % maxRxAngle values
+    box = [-5,25,-15,15];
     numDiff = 3;
-    maxDiff = 1e2;
+    maxDiff = [1, 1e2, 1e4, 1e6];
     numRxRadii = 1;
     numRxAngle = 1;
+    maxRxAngle = 0;
     maxRxRadius = 1;
     numGrid = 60;
     header = {};
@@ -137,25 +137,26 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     filename = ['extsts_',fname,'_rkc.mat'];
     q = matfile(filename,'Writable',true);
     q.box = box;
-    q.thetavals = thetavals;
     q.numDiff = numDiff;
     q.maxDiff = maxDiff;
     q.numRxRadii = numRxRadii;
     q.numRxAngle = numRxAngle;
+    q.maxRxAngle = maxRxAngle;
     q.maxRxRadius = maxRxRadius;
     q.numGrid = numGrid;
     fig = figure;
     stab_region(double(Ai),double(bi),box,fig,'k--','base');  % base method stability region
+    header{1} = 'Base';
     hold on
 
-    for itheta = 1:length(thetavals)
-      maxTheta = thetavals(itheta);
-      RxParams = [maxTheta, numRxAngle, maxRxRadius, numRxRadii];
-      DiffParams = [maxDiff, numDiff];
+    for idiff = 1:length(maxDiff)
+      RxParams = [maxRxAngle, numRxAngle, maxRxRadius, numRxRadii];
+      DiffParams = [maxDiff(idiff), numDiff];
       [xgrid,ygrid,Rmax] = extsts_jointstab(Ai, Ae, 'RKC', RxParams, DiffParams, box, numGrid);
-      R{itheta} = Rmax;
-      contour(xgrid, ygrid, Rmax', [1+eps,1+eps], 'color', plotcolors{itheta}, 'LineStyle', ...
-              plotlinestyle{itheta}, 'LineWidth', 2);
+      R{idiff} = Rmax;
+      contour(xgrid, ygrid, Rmax', [1+eps,1+eps], 'color', plotcolors{idiff}, 'LineStyle', ...
+              plotlinestyle{idiff}, 'LineWidth', 2);
+      header{idiff+1} = ['\rho = ',num2str(maxDiff(idiff))];
     end
 
     q.R = R;
@@ -168,8 +169,9 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     hold off
     tstring = ['ExtSTS joint stability -- ', mname,' + RKC'];
     title(tstring);
-    lgd = legend('Base','ExtSTS');
-    lgd.Location = 'best';
+    lgd = legend(header);
+    lgd.Location = 'northeast';
+    lgd.Title.String = '\rho values';
 
     plotfile = ['extsts_',fname,'_rkc'];
     print('-dpng',plotfile);
@@ -180,25 +182,24 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     filename = ['extsts_',fname,'_rkl.mat'];
     q = matfile(filename,'Writable',true);
     q.box = box;
-    q.thetavals = thetavals;
     q.numDiff = numDiff;
     q.maxDiff = maxDiff;
     q.numRxRadii = numRxRadii;
     q.numRxAngle = numRxAngle;
+    q.maxRxAngle = maxRxAngle;
     q.maxRxRadius = maxRxRadius;
     q.numGrid = numGrid;
     fig = figure;
     stab_region(double(Ai),double(bi),box,fig,'k--','base');  % base method stability region
     hold on
 
-    for itheta = 1:length(thetavals)
-      maxTheta = thetavals(itheta);
-      RxParams = [maxTheta, numRxAngle, maxRxRadius, numRxRadii];
-      DiffParams = [maxDiff, numDiff];
+    for idiff = 1:length(maxDiff)
+      RxParams = [maxRxAngle, numRxAngle, maxRxRadius, numRxRadii];
+      DiffParams = [maxDiff(idiff), numDiff];
       [xgrid,ygrid,Rmax] = extsts_jointstab(Ai, Ae, 'RKL', RxParams, DiffParams, box, numGrid);
-      R{itheta} = Rmax;
-      contour(xgrid, ygrid, Rmax', [1+eps,1+eps], 'color', plotcolors{itheta}, 'LineStyle', ...
-              plotlinestyle{itheta}, 'LineWidth', 2);
+      R{idiff} = Rmax;
+      contour(xgrid, ygrid, Rmax', [1+eps,1+eps], 'color', plotcolors{idiff}, 'LineStyle', ...
+              plotlinestyle{idiff}, 'LineWidth', 2);
     end
 
     q.R = R;
@@ -211,8 +212,9 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     hold off
     tstring = ['ExtSTS joint stability -- ', mname,' + RKL'];
     title(tstring);
-    lgd = legend('Base','ExtSTS');
-    lgd.Location = 'best';
+    lgd = legend(header);
+    lgd.Location = 'northeast';
+    lgd.Title.String = '\rho values';
 
     plotfile = ['extsts_',fname,'_rkl'];
     print('-dpng',plotfile);

@@ -90,7 +90,7 @@ function [xgrid,ygrid,Rmax] = extsts_jointstab(Ai,Ae,DMethod,RxParams,DiffParams
 
   Rmax = zeros(Nx,Ny);
   count = 0;
-  fprintf('Running %s for %s with max(RAngle) = %4.2f degrees.  Nx = %i, Ny = %i, NDiff = %i, NRx = %i\n', plottype, DMethod, RAngles(end)*180/pi, Nx, Ny, length(DRadii), length(RAngles)*length(RRadii));
+  fprintf('Running %s for %s with max(RAngle) = %4.2f degrees and max(DiffRho) = %4.2f.  Nx = %i, Ny = %i, NDiff = %i, NRx = %i\n', plottype, DMethod, RAngles(end)*180/pi, DiffParams(1), Nx, Ny, length(DRadii), length(RAngles)*length(RRadii));
   tic
   for ix = 1:Nx  % loop over mesh
     for iy = 1:(Ny+1)/2
