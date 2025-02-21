@@ -2115,21 +2115,19 @@ if (~failed || ~failE || ~failI)
 end
 
 
-% determine SSP coefficients for component methods
-try
-  ERK_ssp = ssp_coefficient(double(AE), double(bE));
-catch
-  ERK_ssp = -1;
-end
-try
-  DIRK_ssp = ssp_coefficient(double(AI), double(bI));
-catch
-  DIRK_ssp = -1;
-end
-
-
 % report
 if (reportL>0)
+   % determine SSP coefficients for component methods
+   try
+      ERK_ssp = ssp_coefficient(double(AE), double(bE));
+   catch
+      ERK_ssp = -1;
+   end
+   try
+      DIRK_ssp = ssp_coefficient(double(AI), double(bI));
+   catch
+      DIRK_ssp = -1;
+   end
    fprintf('  Overall results:\n');
    fprintf('    ERK:  order = %i,  stage order = %i,  stiffly accurate = %i,  SSP coeff = %g\n', qE,qsE,expSA,ERK_ssp);
    fprintf('    DIRK: order = %i,  stage order = %i,  stiffly accurate = %i,  SSP coeff = %g\n', qI,qsI,impSA,DIRK_ssp);
@@ -2141,23 +2139,20 @@ end
 % generate plot of stability regions
 if (doPlot)
    fig = figure();
+   thetas = [0, 15, 30, 45, 60, 75, 90];
    xl = box(1:2);  yl = box(3:4);
    xax = plot(linspace(xl(1),xl(2),10),zeros(1,10),'k:'); hold on
    yax = plot(zeros(1,10),linspace(yl(1),yl(2),10),'k:');
-   stab_region(double(AE),double(bE),box,fig,'r-');     % ERK stability region
-   stab_region(double(AI),double(bI),box,fig,'b-');     % DIRK stability region
+   joint_stab_region(double(AE),double(AI),double(bE),double(bI),thetas,box,fig);
    set(get(get(xax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
    set(get(get(yax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
    axis(box)
    xlabel('Re(z)')
    ylabel('Im(z)')
-   title(sprintf('%s stability regions, order %i',mname,q))
-   legend(sprintf('ERK, order %i',qE),...
-          sprintf('DIRK, order %i',qI),...
-          'Location', 'northwest')
-   print(sprintf('%s_stab_regions.png', fname), '-dpng');
-   print(sprintf('%s_stab_regions.eps', fname), '-depsc');
-   savefig(sprintf('%s_stab_regions.fig', fname));
+   title(sprintf('ARK joint stability boundary for %s method',mname))
+   print(sprintf('%s_joint_stab_region.png', fname), '-dpng');
+   print(sprintf('%s_joint_stab_region.eps', fname), '-depsc');
+   savefig(sprintf('%s_joint_stab_region.fig', fname));
 end
 
 % end of function

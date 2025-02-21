@@ -20,9 +20,6 @@ function [C] = ssp_coefficient(A,b)
   % For details, see the LICENSE file.
   %------------------------------------------------------------
 
-  % disable warnings in this function (due to tests with singular matrices)
-  warning('off', 'all')
-
   % ensure that A and b are compatible dimensions
   stages = length(b);
   if (size(A,1) ~= stages)
@@ -31,6 +28,9 @@ function [C] = ssp_coefficient(A,b)
   if (size(A,2) ~= stages)
     error('the number of columns in A does not match the length of b');
   end
+
+  % disable warnings in this function (due to tests with singular matrices)
+  warning('off', 'all')
 
   % construct square matrix S that contains both A and b
   S = zeros(stages+1, stages+1);
@@ -74,9 +74,9 @@ function [C] = ssp_coefficient(A,b)
     end
   end
 
-end
+  % re-enable warnings
+  warning('on', 'all')
 
-% re-enable warnings
-warning('on', 'all')
+end
 
 % end of function

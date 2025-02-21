@@ -1,5 +1,4 @@
 function [xgrid,ygrid,Rmax] = imexmri_jointstab(G,W,dc,maxalpha,maxtheta,numRay,numAngle,box,numGrid,plottype)
-  % NEWEST VERSION
   % Figure out the combined stability given A(theta) implicit stability region
   % and fast A(alpha) stability region
   % G cell array with gamma matrices
@@ -17,6 +16,8 @@ function [xgrid,ygrid,Rmax] = imexmri_jointstab(G,W,dc,maxalpha,maxtheta,numRay,
   % Southern Methodist University
   % Department of Mathematics
   % Spring 2020
+  %
+  % Updated by Daniel Reynolds, SMU, Spring 2025
 
   coder.extrinsic('tic')
   coder.extrinsic('toc')
@@ -38,7 +39,6 @@ function [xgrid,ygrid,Rmax] = imexmri_jointstab(G,W,dc,maxalpha,maxtheta,numRay,
   Nrho =  numRay;
   Nalpha = numAngle;
   maxrho = 1;
-  % rho  = -fliplr(logspace(-maxrho,maxrho,Nrho));
   rho = -linspace(1e-6,maxrho,Nrho);
   alpha = linspace(-maxalpha*pi/180,maxalpha*pi/180,Nalpha);
 
@@ -114,7 +114,6 @@ function [xgrid,ygrid,Rmax] = imexmri_jointstab(G,W,dc,maxalpha,maxtheta,numRay,
       end
       count = count + 1;
       if(mod(count,floor(totalcount/10))==0)
-        % fprintf('count = %i, b = %i, totalcount = %i\n',count,floor(totalcount/10),totalcount);
         percentdone = floor(count*100/(totalcount));
         fprintf('completed = %g, %g percent \n',count,percentdone);
         toc

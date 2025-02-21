@@ -4156,31 +4156,30 @@ if (~failed || ~failE || ~failI)
 end
 
 
-% determine SSP coefficients for component methods and embeddings
-try
-  ERK_ssp = ssp_coefficient(double(AE), double(bE));
-catch
-  ERK_ssp = -1;
-end
-try
-  ERKembed_ssp = ssp_coefficient(double(AE), double(dE));
-catch
-  ERKembed_ssp = -1;
-end
-try
-  DIRK_ssp = ssp_coefficient(double(AI), double(bI));
-catch
-  DIRK_ssp = -1;
-end
-try
-  DIRKembed_ssp = ssp_coefficient(double(AI), double(dI));
-catch
-  DIRKembed_ssp = -1;
-end
-
-
 % report
 if (reportL>0)
+   % determine SSP coefficients for component methods and embeddings
+   try
+      ERK_ssp = ssp_coefficient(double(AE), double(bE));
+   catch
+      ERK_ssp = -1;
+   end
+   try
+      ERKembed_ssp = ssp_coefficient(double(AE), double(dE));
+   catch
+      ERKembed_ssp = -1;
+   end
+   try
+      DIRK_ssp = ssp_coefficient(double(AI), double(bI));
+   catch
+      DIRK_ssp = -1;
+   end
+   try
+      DIRKembed_ssp = ssp_coefficient(double(AI), double(dI));
+   catch
+      DIRKembed_ssp = -1;
+   end
+
    fprintf('  Overall results:\n');
    fprintf('    ERK:   order = %i,  embed order = %i,  stage order = %i,  stiffly accurate = %i,  SSP coeff = %g,  embed SSP = %g\n', ...
            qE, pE, qsE, expSA, ERK_ssp, ERKembed_ssp);
@@ -4192,30 +4191,62 @@ if (reportL>0)
 end
 
 
-% generate plot of stability regions
+% generate plots of stability regions
 if (doPlot)
+
+   % joint stability region
    fig = figure();
    xl = box(1:2);  yl = box(3:4);
    xax = plot( linspace(xl(1),xl(2),10), zeros(1,10), 'k:'); hold on
    yax = plot( zeros(1,10), linspace(yl(1),yl(2),10), 'k:');
-   stab_region(double(AE), double(bE), box, fig, 'r-');     % ERK stability region
-   stab_region(double(AE), double(dE), box, fig, 'g-');     % ERK embedding stability region
-   stab_region(double(AI), double(bI), box, fig, 'b-');     % DIRK stability region
-   stab_region(double(AI), double(dI), box, fig, 'm-');     % DIRK embedding stability region
+%   stab_region(double(AE), double(bE), box, fig, 'r-', 'ERK');
+%   stab_region(double(AE), double(dE), box, fig, 'g-', 'ERK embedding');
+%   stab_region(double(AI), double(bI), box, fig, 'b-', 'DIRK');
+%   stab_region(double(AI), double(dI), box, fig, 'm-', 'DIRK embedding');
+   thetas = [0, 20, 40, 60, 80];
+   joint_stab_region(double(AE),double(AI),double(bE),double(bI),thetas,box,fig);
+   set(get(get(xax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
+   set(get(get(yax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
+%   legend('Location', 'northwest')
+   axis(box)
+   xlabel('Re(z)')
+   ylabel('Im(z)')
+%   title(sprintf('%s joint stability regions, ord %i, emb ord %i',mname,q,p))
+%   print(sprintf('%s_stab_regions.png', fname), '-dpng');
+%   print(sprintf('%s_stab_regions.eps', fname), '-depsc');
+%   savefig(sprintf('%s_stab_regions.fig', fname));
+   title(sprintf('ARK joint stability for %s method',mname))
+   print(sprintf('%s_joint_stab_region.png', fname), '-dpng');
+   print(sprintf('%s_joint_stab_region.eps', fname), '-depsc');
+   savefig(sprintf('%s_joint_stab_region.fig', fname));
+
+   % individual stability regions
+   fig = figure();
+   xl = box(1:2);  yl = box(3:4);
+   xax = plot(linspace(xl(1),xl(2),10),zeros(1,10),'k:'); hold on
+   yax = plot(zeros(1,10),linspace(yl(1),yl(2),10),'k:');
+   stab_region(double(AE),double(bE),box,fig,'r-','ERK method');  % explicit method
+   stab_region(double(AI),double(bI),box,fig,'b-','DIRK method');  % implicit method
+   stab_region(double(AE),double(dE),box,fig,'g-','ERK embedding');  % explicit embedding
+   stab_region(double(AI),double(dI),box,fig,'m-','DIRK embedding');  % implicit embedding
    set(get(get(xax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
    set(get(get(yax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
    axis(box)
    xlabel('Re(z)')
    ylabel('Im(z)')
-   title(sprintf('%s stability regions, ord %i, emb ord %i',mname,q,p))
-   legend(sprintf('ERK, order %i', qE),...
-          sprintf('ERK embedding, order %i', pE),...
-          sprintf('DIRK, order %i', qI),...
-          sprintf('DIRK embedding, order %i', pI),...
-          'Location', 'northwest')
+   title(sprintf('%s linear stability regions',mname))
+   lgd = legend;
+   s = lgd.String;
+   for i=5:length(s)-1
+     s{i} = '';
+   end
+   legend(s);
    print(sprintf('%s_stab_regions.png', fname), '-dpng');
    print(sprintf('%s_stab_regions.eps', fname), '-depsc');
    savefig(sprintf('%s_stab_regions.fig', fname));
+end
+
+
 end
 
 % end of function

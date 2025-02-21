@@ -116,18 +116,18 @@ end
 [q,lq] = table_order(c,A,b,tol,reportL);
 [As,Bs,Ls] = stability(A,b,StabTol);
 
-% check for SSP coefficient of method
-try
-  ssp = ssp_coefficient(double(A), double(b));
-catch
-  ssp = -1;
-end
-
 % report on method
 if (reportL>0)
+   % check for SSP coefficient of method
+   try
+      ssp = ssp_coefficient(double(A), double(b));
+   catch
+      ssp = -1;
+   end
+
    fprintf('  %s stage order = %i\n', mname, qs);
    if (ssp > 0)
-      fprintf('    method:    q = %i,  lq = %i,  As = %i,  Bs = %i,  Ls = %i,  SA = %i, SSP = %g\n', ...
+      fprintf('    method:    q = %i,  lq = %i,  As = %i,  Bs = %i,  Ls = %i,  SA = %i,  SSP = %g\n', ...
               q, lq, As, Bs, Ls, SA, ssp);
    else
       fprintf('    method:    q = %i,  lq = %i,  As = %i,  Bs = %i,  Ls = %i,  SA = %i\n', ...
@@ -140,8 +140,20 @@ if (embedded)
    [p,lp] = table_order(c,A,d,tol,reportL);
    [AsE,BsE,LsE] = stability(A,d,StabTol);
    if (reportL>0)
-      fprintf('    embedding: p = %i,  lp = %i,  As = %i,  Bs = %i,  Ls = %i\n', ...
-              p, lp, AsE, BsE, LsE);
+      % check for SSP coefficient of embedding
+      try
+         ssp = ssp_coefficient(double(A), double(d));
+      catch
+         ssp = -1;
+      end
+
+      if (ssp > 0)
+         fprintf('    embedding: p = %i,  lp = %i,  As = %i,  Bs = %i,  Ls = %i,  SSP = %g\n', ...
+                 p, lp, AsE, BsE, LsE, ssp);
+      else
+         fprintf('    embedding: p = %i,  lp = %i,  As = %i,  Bs = %i,  Ls = %i\n', ...
+                 p, lp, AsE, BsE, LsE);
+      end
    end
 else
    p = 0;
@@ -180,9 +192,9 @@ if (doPlot)
    xl = box(1:2);  yl = box(3:4);
    xax = plot(linspace(xl(1),xl(2),10),zeros(1,10),'k:'); hold on
    yax = plot(zeros(1,10),linspace(yl(1),yl(2),10),'k:');
-   stab_region(double(A),double(b),box,fig,'r-');  % method
+   stab_region(double(A),double(b),box,fig,'r-','method');  % method
    if (embedded)
-      stab_region(double(A),double(d),box,fig,'b--');  % embedding
+      stab_region(double(A),double(d),box,fig,'b--','embedding');  % embedding
    end
    set(get(get(xax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
    set(get(get(yax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
@@ -190,11 +202,14 @@ if (doPlot)
    xlabel('Re(z)')
    ylabel('Im(z)')
    if (embedded)
-%      title(sprintf('%s stability regions, order %i',mname,q))
-      title(sprintf('Stability boundary for %s method',mname))
-      legend('method','embedding')
+      title(sprintf('Linear stability for %s method',mname))
+      lgd = legend;
+      s = lgd.String;
+      for i=2:length(s)-1
+        s{i} = '';
+      end
+      legend(s);
    else
-%      title(sprintf('%s stability region, order %i',mname,q))
       title(sprintf('Stability boundary for %s method',mname))
    end
    print(sprintf('%s_stab_region.png', fname), '-dpng');
