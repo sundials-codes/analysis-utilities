@@ -1154,7 +1154,7 @@ elseif (strcmp(method_name,'SSP(4,3)-ESDIRK'))
    p = 2;
    B = [c, A; q, b; p, b2];
 
-elseif (strcmp(method_name,'SSP(9,3)-DIRK'))
+elseif (strcmp(method_name,'SSP(9,3)-ESDIRK'))
 
    A = [ z, z, z, z, z, z, z, z, z;
          -v(2)/v(15), v(3)/v(10), z, z, z, z, z, z, z;
