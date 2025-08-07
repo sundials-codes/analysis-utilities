@@ -868,7 +868,7 @@ elseif (strcmp(method_name,'Ascher(2,2,2)-ERK'))
    delta = v(1)-v(1)/(v(2)*gamma);
    c = [z; gamma; v(1)];
    b = [delta, v(1)-delta, z];
-   b2 = [z, v(2)/v(3), v(1)/v(3)];
+   b2 = [z, v(3)/v(5), v(2)/v(5)];
    A = [z, z, z;
         gamma, z, z;
         delta, v(1)-delta, z];
@@ -881,7 +881,7 @@ elseif (strcmp(method_name,'Ascher(2,2,2)-SDIRK'))
    gamma = (v(2)-sqrt(v(2)))/v(2);
    c = [z; gamma; v(1)];
    b = [z, v(1)-gamma, gamma];
-   b2 = [z, v(2)/v(3), v(1)/v(3)];
+   b2 = [z, v(3)/v(5), v(2)/v(5)];
    A = [z, z,       z;
         z, gamma,   z;
         z, v(1)-gamma, gamma];

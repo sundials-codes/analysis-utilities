@@ -16,7 +16,7 @@ function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
   delta = one-one/(two*gamma);
   c = [zed; gamma; gamma; one; one];
   be = [delta, zed, one-delta, zed, zed];
-  de = [zed, zed, two/three, zed, one/three];
+  de = [zed, zed, 0.6, zed, 0.4];
   Ae = [zed, zed, zed, zed, zed;
         gamma, zed, zed, zed, zed;
         gamma, zed, zed, zed, zed;
