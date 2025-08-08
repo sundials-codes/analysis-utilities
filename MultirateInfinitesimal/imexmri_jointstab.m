@@ -176,6 +176,15 @@ function [p,M,N] = zf_dependent_fns(G,W,dc,plottype)
     M = matlabFunction(Mzf);
     N = matlabFunction(Nzf);
     p = matlabFunction(phivals);
+    if (nargin(M) == 0)
+      M = @(z) Mzf;
+    end
+    if (nargin(N) == 0)
+      N = @(z) Nzf;
+    end
+    if (nargin(p) == 0)
+      p = @(z) phivals;
+    end
 
   case {'implicit','explicit','imex'}
     % No fast dependency, matrices are constant
