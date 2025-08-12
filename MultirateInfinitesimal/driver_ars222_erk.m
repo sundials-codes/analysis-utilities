@@ -1,36 +1,36 @@
-function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
+function driver_ars222_erk(maxAlpha,plotRK,plotMRI,plotExtSTS)
 
   addpath('../RungeKutta')
 
   % shared plotting information
   box = [-3,0.5,-3,3];
-  mname = 'Ralston';
-  fname = 'Ralston';
+  mname = 'Ascher(2,2,2)-ERK';
+  fname = 'ARS222-ERK';
 
   % create base Butcher tables (including padding and stiff accuracy)
   zed = 0;  % zed = sym(0);
   one = 1;  % one = sym(1);
   two = 2;  % two = sym(2);
   three = 3;  % three = sym(3);
-  four = 4;  % four = sym(4);
-  d1 = 5/37; % d1 = sym(5)/sym(37);
-  d3 = 22/111; % d1 = sym(22)/sym(111);
-  d2 = two/three;
-  c = [zed; two/three; one];
-  be = [one/four, three/four, zed];
-  de = [d1, d2, d3];
-  Ae = [zed, zed, zed;
-        two/three, zed, zed;
-        one/four, three/four, zed];
+  gamma = (two-sqrt(two))/two;
+  delta = one-one/(two*gamma);
+  c = [zed; gamma; gamma; one; one];
+  be = [delta, zed, one-delta, zed, zed];
+  de = [zed, zed, 0.6, zed, 0.4];
+  Ae = [zed, zed, zed, zed, zed;
+        gamma, zed, zed, zed, zed;
+        gamma, zed, zed, zed, zed;
+        delta, zed, one-delta, zed, zed;
+        delta, zed, one-delta, zed, zed];
   Be = [c, Ae; 2, be; 1, de];
   bi = 0;
   di = 0;
   Ai = 0;
   Bi = 0;
 
-  % verify properties and generate plots of ImEx-ARK method
+  % verify properties and generate plots of RK method
   if (plotRK)
-    fprintf('\nChecking ERK method properties for %s method\n', mname)
+    fprintf('\nChecking RK method properties for %s method\n', mname)
     check_rk(Be,1,true,box,mname,fname);
   end
 
@@ -43,8 +43,8 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     thetavals = [0];  % maxRxAngle values
     numDiff = 3;
     maxDiff = 1e2;
-    numRxRadii = 1;
-    numRxAngle = 1;
+    numRxRadii = 3;
+    numRxAngle = 2;
     maxRxRadius = 1;
     numGrid = 60;
     plotcolors = {[0 0.4470 0.7410],[0.8500 0.3250 0.0980],[0.4940 0.1840 0.5560], ...
@@ -63,7 +63,7 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     q.maxRxRadius = maxRxRadius;
     q.numGrid = numGrid;
     fig = figure;
-    stab_region(double(Ae),double(be),box,fig,'k--','base');  % base method stability region
+    stab_region(double(Ae),double(be),box,fig,'k--','base');  % base explicit method stability region
     hold on
 
     for itheta = 1:length(thetavals)
@@ -138,7 +138,7 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
 
   end
 
-  % generate joint stability plot for this as an MRI-GARK method
+  % generate joint stability plot for this as an ImEx-MRI-GARK method
   if (plotMRI)
     fprintf('\nPlotting MRI joint stability region for %s method\n', mname)
 
@@ -151,7 +151,7 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     % pad W with an initial row of zeros to match expected table structure,
     % and remove embedding row
     Wm = Wmri{1};
-    W{1} = [zeros(1,3); Wm(1:end-1,:)];
+    W{1} = [zeros(1,5); Wm(1:end-1,:)];
     G{1} = 0*W{1};;
 
     % set "dc" increment array (pad with initial 0)
@@ -216,4 +216,3 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     savefig(plotname);
 
   end
-

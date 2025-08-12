@@ -1,37 +1,37 @@
-function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
+function driver_ars222_sdirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
 
   addpath('../RungeKutta')
 
   % shared plotting information
-  box = [-3,0.5,-3,3];
-  mname = 'Ralston';
-  fname = 'Ralston';
+  box = [-5,110,-55,55];
+  mname = 'Ascher(2,2,2)-SDIRK';
+  fname = 'ARS222-SDIRK';
 
   % create base Butcher tables (including padding and stiff accuracy)
   zed = 0;  % zed = sym(0);
   one = 1;  % one = sym(1);
   two = 2;  % two = sym(2);
   three = 3;  % three = sym(3);
-  four = 4;  % four = sym(4);
-  d1 = 5/37; % d1 = sym(5)/sym(37);
-  d3 = 22/111; % d1 = sym(22)/sym(111);
-  d2 = two/three;
-  c = [zed; two/three; one];
-  be = [one/four, three/four, zed];
-  de = [d1, d2, d3];
-  Ae = [zed, zed, zed;
-        two/three, zed, zed;
-        one/four, three/four, zed];
-  Be = [c, Ae; 2, be; 1, de];
-  bi = 0;
-  di = 0;
-  Ai = 0;
-  Bi = 0;
+  gamma = (two-sqrt(two))/two;
+  delta = one-one/(two*gamma);
+  c = [zed; gamma; gamma; one; one];
+  di = [zed, zed, 0.6, zed, 0.4];
+  bi = [zed, zed, one-gamma, zed, gamma];
+  Ai = [zed, zed, zed, zed, zed;
+        gamma, zed, zed, zed, zed;
+        zed, zed, gamma, zed, zed;
+        zed, zed, one, zed, zed;
+        zed, zed, one-gamma, zed, gamma];
+  Bi = [c, Ai; 2, bi; 1, di];
+  Ae = 0;
+  be = 0;
+  de = 0;
+  Be = 0;
 
-  % verify properties and generate plots of ImEx-ARK method
+  % verify properties and generate plots of RK method
   if (plotRK)
-    fprintf('\nChecking ERK method properties for %s method\n', mname)
-    check_rk(Be,1,true,box,mname,fname);
+    fprintf('\nChecking RK method properties for %s method\n', mname)
+    check_rk(Bi,1,true,box,mname,fname);
   end
 
   % generate joint stability plot for this as an ExtSTS method
@@ -39,14 +39,15 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     fprintf('\nPlotting ExtSTS joint stability region for %s method\n', mname)
 
     % test parameters
-    box = [-2.5,0.5,-2.5,2.5];
+    box = [-5,110,-55,55];
     thetavals = [0];  % maxRxAngle values
     numDiff = 3;
     maxDiff = 1e2;
-    numRxRadii = 1;
-    numRxAngle = 1;
+    numRxRadii = 3;
+    numRxAngle = 2;
     maxRxRadius = 1;
     numGrid = 60;
+    header = {};
     plotcolors = {[0 0.4470 0.7410],[0.8500 0.3250 0.0980],[0.4940 0.1840 0.5560], ...
                   [0.4660 0.6740 0.1880],[0.3010 0.7450 0.9330],[0.6350 0.0780 0.1840]};
     plotlinestyle = {'-','--','-.',':','-','--'};
@@ -63,7 +64,7 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     q.maxRxRadius = maxRxRadius;
     q.numGrid = numGrid;
     fig = figure;
-    stab_region(double(Ae),double(be),box,fig,'k--','base');  % base method stability region
+    stab_region(double(Ae),double(be),box,fig,'k--','base');  % base explicit method stability region
     hold on
 
     for itheta = 1:length(thetavals)
@@ -142,17 +143,17 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
   if (plotMRI)
     fprintf('\nPlotting MRI joint stability region for %s method\n', mname)
 
-    % convert Butcher tables to MRI "Gamma" and "Omega" matrices
-    [cmri, Wmri] = mis_to_mri(Be);
+    % convert Butcher tables to MRI "Omega" matrix
+    [cmri, Gmri] = mis_to_mri(Bi);
     if (cmri ~= c)
-      error('cmri does not match c for explicit MIS table')
+      error('cmri does not match c for implicit MIS table')
     end
 
-    % pad W with an initial row of zeros to match expected table structure,
+    % pad G with an initial row of zeros to match expected table structure,
     % and remove embedding row
-    Wm = Wmri{1};
-    W{1} = [zeros(1,3); Wm(1:end-1,:)];
-    G{1} = 0*W{1};;
+    Gm = Gmri{1};
+    G{1} = [zeros(1,5); Gm(1:end-1,:)];
+    W{1} = 0*G{1};;
 
     % set "dc" increment array (pad with initial 0)
     dc = [0; c(2:end)-c(1:end-1)];
@@ -163,7 +164,7 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     numGrid = 200;
     numAngle = 2;
     header = {};
-    plottype = 'explicit_mrigark';
+    plottype = 'implicit_mrigark';
     plotcolors = {[0 0.4470 0.7410],[0.8500 0.3250 0.0980],[0.4940 0.1840 0.5560], ...
                   [0.4660 0.6740 0.1880],[0.3010 0.7450 0.9330],[0.6350 0.0780 0.1840]};
     plotlinestyle = {'-','--','-.',':','-','--'};
@@ -193,7 +194,7 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     q.xgrid = xgrid;
     q.ygrid = ygrid;
 
-    plottype = 'explicit';
+    plottype = 'implicit';
     maxTheta = 90;
     numRay = 50;
     numGrid = 50;
@@ -216,4 +217,3 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     savefig(plotname);
 
   end
-
