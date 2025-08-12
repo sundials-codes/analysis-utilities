@@ -1133,7 +1133,6 @@ elseif (strcmp(method_name,'SSP(4,3)-ERK'))
          v(1)/v(6), v(1)/v(6), v(1)/v(6), z];
    b = [ v(1)/v(6), v(1)/v(6), v(1)/v(6), v(1)/v(2)];
    b2 = [ v(1)/v(4), v(1)/v(4), v(1)/v(4), v(1)/v(4)];
-   %b2 = [ v(1)/v(3), v(1)/v(3), v(1)/v(3), z];
    c = sum(A,2);
    q = 3;
    p = 2;
@@ -2171,7 +2170,7 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lpum-SDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-ERK'))
-  % explicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1137/040612968
+  % explicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1137/040612968 (custom embedding)
 
    A = [    z,     z, z;...
           v(5)/v(6),     z, z;...
@@ -2184,7 +2183,7 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-SDIRK'))
-  % implicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1137/040612968
+  % implicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1137/040612968 (custom embedding)
 
    A = [        v(2)/v(11),      z,    z;...
              v(205)/v(462),   v(2)/v(11),    z;...
