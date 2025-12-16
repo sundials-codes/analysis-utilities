@@ -13,9 +13,9 @@ function Higueras_ImEx_ssp_conditions(ERKtableName, DIRKtableName)
 % Input: ERKtableName  - name of the explicit method in butcher.m
 %        DIRKtableName - name of the implicit method in butcher.m
 %------------------------------------------------------------
-% Programmer(s):  Sylvia Amihere @ SMU
+% Programmer(s): Sylvia Amihere @ UMBC
 %------------------------------------------------------------
-% Copyright (c) 2025, Southern Methodist University.
+% Copyright (c) 2025, University of Maryland Baltimore County.
 % All rights reserved.
 % For details, see the LICENSE file.
 %------------------------------------------------------------
@@ -30,6 +30,8 @@ stages_ex = length(B_explicit(1, 2:end));
 stages_im = length(B_implicit(1, 2:end));
 if (stages_ex ~= stages_im)
     error('The number of stages for both explicit and implcit methods should be equal.\n');
+else
+    fprintf("Both method have %d stages\n", stages_ex);
 end
 
 % ------ determine if the methods have an embedding ------
@@ -71,9 +73,8 @@ ctilde_im  = butcher_im(1:end-1, 1); % vector c from explicit method
 
 % ================ Check 'L' property using stab_function.m ===============
 [alpha, beta] = stab_function(Atilde_im,btilde_im);
-
-deg_alpha = length(alpha); % number of coefficients of the numerator polynomial (alpha)
-deg_beta  = length(beta);  % number of coefficients of the denominator polynomial (beta)
+deg_alpha     = length(alpha); % number of coefficients of the numerator polynomial (alpha)
+deg_beta      = length(beta);  % number of coefficients of the denominator polynomial (beta)
 
 if (deg_alpha < deg_beta)
     fprintf('Implicit method is L-stable. Hence, "L" property is satisfied.\n')
@@ -86,9 +87,8 @@ end
 
 % ================= Check 'S' property using stab_function.m ==============
 [alpha_ex, beta_ex] = stab_function(A_ex,b_ex); %coefficients of rational polynomial
-omega_vals          = logspace(-8,0);           %maybe 10 imaginary values
-
-s_property = false;
+omega_vals          = logspace(-8,0);           
+s_property          = false;
 
 for ik = 1:length(omega_vals)
     num_val   = 0.0 + 0.0i;
@@ -105,7 +105,7 @@ for ik = 1:length(omega_vals)
     stab_val = num_val/denom_val;
     if abs(stab_val) <= 1 % is absolute value of rational polynomial at the imaginary value is less than or equal to 1
         s_property = true;
-        break;  %exit the loop once an omega value results in an interval on the imaginary axis for the explicit method
+        % break;  %exit the loop once an omega value results in an interval on the imaginary axis for the explicit method
     end
 end
 
@@ -118,8 +118,8 @@ end
 
 % =========================== Check 'P' property ==========================
 [alpha_im, beta_im] = stab_function(Atilde_im,btilde_im); %coefficients of rational polynomial
-omega_vals          = logspace(-8,0);           %maybe 10 imaginary values
-p_property = false;
+omega_vals          = logspace(-8,0);          
+p_property          = false;
 
 for ik = 1:length(omega_vals)
     num_val   = 0.0 + 0.0i;
@@ -136,7 +136,7 @@ for ik = 1:length(omega_vals)
     stab_val = num_val/denom_val;
     if abs(stab_val) > 0 % is absolute value of rational polynomial at the imaginary value is less than or equal to 1
         p_property = true;
-        break;  %exit the loop once an omega value results in an interval on the imaginary axis for the explicit method
+        % break;  %exit the loop once an omega value results in an interval on the imaginary axis for the explicit method
     end
 end
 
@@ -159,9 +159,10 @@ end
 
 
 % ========================= Check 'M' property ============================
-r1_vals = logspace(-8,0);
-r2_vals = logspace(-8,0);
-e       = ones(stages_ex,1);
+r1_vals    = logspace(-8,0);
+r2_vals    = logspace(-8,0);
+e          = ones(stages_ex,1);
+m_property = false;
 
 % I + r1*A + r2*Atilde is nonsigular, inv(I + r1*A + r2*Atilde)*e >=0
 % inv(I + r1*A + r2*Atilde)*A >=0,    inv(I + r1*A + r2*Atilde)*Atilde >=0
@@ -170,13 +171,18 @@ for r1 = r1_vals
         matrixM = eye(stages_ex) + r1 * A_ex + r2 * Atilde_im;
         if (det(matrixM)~=0)
             if (all(matrixM\e >= 0, 'all') & all(matrixM\A_ex >= 0, 'all') & all(matrixM\Atilde_im >= 0, 'all'))
-                fprintf('ImEx method has a nontrivial region of absolute monotonicity at (%.8f, %.8f). Hence, "M" property is satisfied.\n', r1,r2);
-                return;
-            else
-                fprintf('"M" property is not satisfied.\n');
+                m_property = true;
+                % fprintf('ImEx method has a nontrivial region of absolute monotonicity at (%.8f, %.8f). Hence, "M" property is satisfied.\n', r1,r2);
+                % break;
             end
         end
     end
+end
+
+if (m_property)      
+    fprintf('ImEx method has a nontrivial region of absolute monotonicity. Hence, "M" property is satisfied.\n');
+else
+    fprintf('ImEx method DOES NOT have a nontrivial region of absolute monotonicity. Hence, "M" property is not satisfied.\n');
 end
 
 end %of function
