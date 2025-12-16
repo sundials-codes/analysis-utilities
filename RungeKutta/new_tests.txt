@@ -1,0 +1,90 @@
+                             |     | Method | Embedding |
+            Name             |  s  |   q    |    p      | qs
+  ---------------------------------------------------------------
+  Overall results:
+    ERK:   order = 2,  embed order = 1,  stage order = 1,  stiffly accurate = 0,  SSP coeff = 1,  embed SSP = 1
+    DIRK:  order = 2,  embed order = 1,  stage order = 1,  stiffly accurate = 0,  SSP coeff = 2.41421,  embed SSP = 3.34869
+           method    B/A/L stability = 1/1/1
+           embedding B/A/L stability = 1/1/0
+    ARK:   order = 2,  embed order = 1,  stage order = 0
+              SSP-ARK-2-1-2  |  2  |   2    |    1      |  0
+  Overall results:
+    ERK:   order = 2,  embed order = 1,  stage order = 1,  stiffly accurate = 1,  SSP coeff = -1,  embed SSP = -1
+    DIRK:  order = 2,  embed order = 1,  stage order = 1,  stiffly accurate = 1,  SSP coeff = 2.41421,  embed SSP = 2.41421
+           method    B/A/L stability = 0/1/1
+           embedding B/A/L stability = 0/1/0
+    ARK:   order = 2,  embed order = 1,  stage order = 1
+           ASCHER-ARK-3-1-2  |  3  |   2    |    1      |  1
+  Overall results:
+    ERK:   order = 2,  embed order = 1,  stage order = 1,  stiffly accurate = 0,  SSP coeff = 2,  embed SSP = 2
+    DIRK:  order = 2,  embed order = 1,  stage order = 1,  stiffly accurate = 1,  SSP coeff = 2.4,  embed SSP = 2.4
+           method    B/A/L stability = 0/1/1
+           embedding B/A/L stability = 0/1/0
+    ARK:   order = 2,  embed order = 1,  stage order = 0
+              SSP-ARK-3-1-2  |  3  |   2    |    1      |  0
+  Overall results:
+    ERK:   order = 2,  embed order = 1,  stage order = 1,  stiffly accurate = 0,  SSP coeff = 1.2,  embed SSP = 1.15895
+    DIRK:  order = 2,  embed order = 1,  stage order = 1,  stiffly accurate = 0,  SSP coeff = 3.81818,  embed SSP = 3.81818
+           method    B/A/L stability = 0/1/1
+           embedding B/A/L stability = 0/1/0
+    ARK:   order = 2,  embed order = 1,  stage order = 0
+[Warning: Exported image displays axes toolbar. To remove axes toolbar from image, export again.] 
+        SSP-LSPUM-ARK-3-1-2  |  3  |   2    |    1      |  0
+  Overall results:
+    ERK:   order = 2,  embed order = 1,  stage order = 1,  stiffly accurate = 0,  SSP coeff = 0.0502525,  embed SSP = 0.0502525
+    DIRK:  order = 2,  embed order = 1,  stage order = 2,  stiffly accurate = 1,  SSP coeff = 2.41421,  embed SSP = 2.41421
+           method    B/A/L stability = 0/1/1
+           embedding B/A/L stability = 0/1/0
+    ARK:   order = 2,  embed order = 1,  stage order = 1
+                 ARK2-3-1-2  |  3  |   2    |    1      |  1
+  Overall results:
+    ERK:   order = 3,  embed order = 2,  stage order = 1,  stiffly accurate = 0,  SSP coeff = 2,  embed SSP = 2
+    DIRK:  order = 3,  embed order = 2,  stage order = 1,  stiffly accurate = 0,  SSP coeff = -1,  embed SSP = -1
+           method    B/A/L stability = 0/1/1
+           embedding B/A/L stability = 0/1/0
+    ARK:   order = 3,  embed order = 2,  stage order = 1
+              SSP-ARK-4-2-3  |  4  |   3    |    2      |  1
+  Overall results:
+    ERK:   order = 3,  embed order = 2,  stage order = 1,  stiffly accurate = 0,  SSP coeff = 5.99981,  embed SSP = 1.14411
+    DIRK:  order = 3,  embed order = 2,  stage order = 1,  stiffly accurate = 0,  SSP coeff = -1,  embed SSP = -1
+           method    B/A/L stability = 0/1/1
+           embedding B/A/L stability = 0/1/1
+    ARK:   order = 3,  embed order = 2,  stage order = 1
+              SSP-ARK-9-2-3  |  9  |   3    |    2      |  1
+  Overall results:
+    ERK:   order = 3,  embed order = 2,  stage order = 1,  stiffly accurate = 0,  SSP coeff = -1,  embed SSP = -1
+    DIRK:  order = 3,  embed order = 2,  stage order = 2,  stiffly accurate = 1,  SSP coeff = -1,  embed SSP = -1
+           method    B/A/L stability = 0/1/1
+           embedding B/A/L stability = 0/1/0
+    ARK:   order = 3,  embed order = 2,  stage order = 1
+           ARK324L2SA-4-2-3  |  4  |   3    |    2      |  1
+  Overall results:
+    ERK:   order = 4,  embed order = 3,  stage order = 1,  stiffly accurate = 0,  SSP coeff = -1,  embed SSP = -1
+    DIRK:  order = 4,  embed order = 3,  stage order = 2,  stiffly accurate = 1,  SSP coeff = -1,  embed SSP = -1
+           method    B/A/L stability = 0/1/1
+           embedding B/A/L stability = 0/1/0
+    ARK:   order = 4,  embed order = 3,  stage order = 1
+           ARK436L2SA-6-3-4  |  6  |   4    |    3      |  1
+  Overall results:
+    ERK:   order = 4,  embed order = 3,  stage order = 1,  stiffly accurate = 0,  SSP coeff = -1,  embed SSP = -1
+    DIRK:  order = 4,  embed order = 3,  stage order = 2,  stiffly accurate = 1,  SSP coeff = -1,  embed SSP = -1
+           method    B/A/L stability = 0/1/1
+           embedding B/A/L stability = 0/1/0
+    ARK:   order = 4,  embed order = 3,  stage order = 1
+           ARK437L2SA-7-3-4  |  7  |   4    |    3      |  1
+  Overall results:
+    ERK:   order = 5,  embed order = 4,  stage order = 1,  stiffly accurate = 0,  SSP coeff = -1,  embed SSP = -1
+    DIRK:  order = 5,  embed order = 4,  stage order = 2,  stiffly accurate = 1,  SSP coeff = -1,  embed SSP = -1
+           method    B/A/L stability = 0/1/1
+           embedding B/A/L stability = 0/1/0
+    ARK:   order = 5,  embed order = 4,  stage order = 1
+           ARK548L2SA-8-4-5  |  8  |   5    |    4      |  1
+  Overall results:
+    ERK:   order = 5,  embed order = 4,  stage order = 1,  stiffly accurate = 0,  SSP coeff = -1,  embed SSP = -1
+    DIRK:  order = 5,  embed order = 4,  stage order = 2,  stiffly accurate = 1,  SSP coeff = -1,  embed SSP = -1
+           method    B/A/L stability = 0/1/1
+           embedding B/A/L stability = 0/1/0
+    ARK:   order = 5,  embed order = 4,  stage order = 1
+          ARK548L2SAb-8-4-5  |  8  |   5    |    4      |  1
+  -----------------------------------------------------------------
+
