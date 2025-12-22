@@ -170,7 +170,7 @@ for r1 = r1_vals
     for r2 = r2_vals
         matrixM = eye(stages_ex) + r1 * A_ex + r2 * Atilde_im;
         if (det(matrixM)~=0)
-            if (all(matrixM\e >= 0, 'all') & all(matrixM\A_ex >= 0, 'all') & all(matrixM\Atilde_im >= 0, 'all'))
+            if (all(matrixM\e >= 0, 'all') && all(matrixM\A_ex >= 0, 'all') && all(matrixM\Atilde_im >= 0, 'all'))
                 m_property = true;
                 % fprintf('ImEx method has a nontrivial region of absolute monotonicity at (%.8f, %.8f). Hence, "M" property is satisfied.\n', r1,r2);
                 % break;
