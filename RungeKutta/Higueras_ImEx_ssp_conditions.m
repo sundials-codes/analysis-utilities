@@ -63,9 +63,39 @@ c_ex       = butcher_ex(1:end-1, 1); % vector c from explicit method
 % ---- extract Butcher table for implcit method without embedding -----
 butcher_im = B_implicit(1:new_rows_im, 1:cols_im);
 Atilde_im  = butcher_im(1:end-1, 2:end);  %matrix A from implicit method
-btilde_im  = butcher_im(new_rows_ex, 2:end); %vector b from explicit method
-ctilde_im  = butcher_im(1:end-1, 1); % vector c from explicit method
+btilde_im  = butcher_im(new_rows_im, 2:end); %vector b from implicit method
+ctilde_im  = butcher_im(1:end-1, 1); % vector c from implicit method
 
+
+%tolrenace to remove coefficients below machine precison
+tolerance = eps;
+
+% ====== Check stability property of implicit method with embedding =======
+if (stages_im + 2 == rows_im) %embedding exisits
+    b_embedding = B_implicit(end, 2:end);
+end
+
+[alpha_s1, beta_s1] = stab_function(Atilde_im,b_embedding);
+
+%keep coefficeints above machine precision
+alpha_s1_amcp = abs(alpha_s1)>=tolerance;
+beta_s1_amcp  = abs(beta_s1)>=tolerance;
+alpha_s1      = alpha_s1(alpha_s1_amcp);
+beta_s1       = beta_s1(beta_s1_amcp);
+
+deg_alpha_s1 = length(alpha_s1); % number of coefficients of the numerator polynomial (alpha)
+deg_beta_s1 = length(beta_s1);  % number of coefficients of the denominator polynomial (beta)
+
+if (deg_alpha_s1 < deg_beta_s1)
+    fprintf('Implicit method with embedding is L-stable. \n')
+elseif (deg_alpha_s1 == deg_beta_s1)
+    fprintf('Implicit method with embedding is A-stable but not L-stable. \n')
+else %deg_alpha_s1 > deg_beta_s1
+    fprintf('Implicit method with embedding is not L-stable.\n') 
+end
+
+fprintf("\n")
+fprintf("=================Checking LSPUM Properties=====================\n")
 
 % -------------------------------------------------------------------------
 %                   Check the L S P U M properties
@@ -73,6 +103,13 @@ ctilde_im  = butcher_im(1:end-1, 1); % vector c from explicit method
 
 % ================ Check 'L' property using stab_function.m ===============
 [alpha, beta] = stab_function(Atilde_im,btilde_im);
+
+%keep coefficeints above machine precision
+alpha_amcp = abs(alpha)>=tolerance;
+beta_amcp  = abs(beta)>=tolerance;
+alpha      = alpha(alpha_amcp);
+beta       = beta(beta_amcp);
+
 deg_alpha     = length(alpha); % number of coefficients of the numerator polynomial (alpha)
 deg_beta      = length(beta);  % number of coefficients of the denominator polynomial (beta)
 
@@ -81,7 +118,7 @@ if (deg_alpha < deg_beta)
 elseif (deg_alpha == deg_beta)
     fprintf('Implicit method is A-stable but not L-stable. Hence, "L" property is not satisfied.\n')
 else %deg_alpha > deg_beta
-    fprintf('Implicit method is not A-stable. Hence, "L" property is not satified.\n') % hence not L-stable
+    fprintf('Implicit method is not L-stable (also not A-stable). Hence, "L" property is not satified.\n') % hence not L-stable
 end
 
 
