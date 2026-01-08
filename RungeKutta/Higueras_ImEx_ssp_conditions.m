@@ -67,7 +67,7 @@ btilde_im  = butcher_im(new_rows_im, 2:end); %vector b from implicit method
 ctilde_im  = butcher_im(1:end-1, 1); % vector c from implicit method
 
 
-%tolrenace to remove coefficients below machine precison
+%tolerance to remove coefficients below machine precison
 tolerance = eps;
 
 % ====== Check stability property of implicit method with embedding =======
