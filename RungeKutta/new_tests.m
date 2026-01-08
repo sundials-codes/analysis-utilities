@@ -19,7 +19,7 @@ plotregions = true;   % create stability region plots
 use_symbolic = false; % use symbolic storage for tables
 reportL = 1;          % level of reporting output from check_* routines
 do_explicit = false;
-do_implicit = false;
+do_implicit = true;
 do_imex = true;
 
 % explicit methods
@@ -33,7 +33,7 @@ if (do_explicit)
            {'SSP(4,3)-ERK',          'SSP-ERK-4-2-3',        'ARKODE_SSP_ERK_4_2_3',       [-8,1,-5,5]},
            {'SSP(9,3)-ERK',          'SSP-ERK-9-2-3',        'ARKODE_SSP_ERK_9_2_3',       [-20,2,-10,10]},
            {'SSP(10,4)-ERK',         'SSP-ERK-10-3-4',       'ARKODE_SSP_ERK_10_3_4',      [-20,2,-10,10]},
-           {'SSP2(3,3,2)-lspum-ERK', 'SSP-LSPUM-ERK-3-1-2', 'ARKODE_SSP_LSPUM_ERK_3_1_2',  [-3.5,0.5,-3.5,3.5]},
+           {'SSP2(3,3,2)-lspum-ERK', 'SSP-LSPUM-ERK-3-1-2',  'ARKODE_SSP_LSPUM_ERK_3_1_2', [-3.5,0.5,-3.5,3.5]},
            {'Giraldo-ARK2-ERK',      'ARK2-ERK-3-1-2',       'ARKODE_ARK2_ERK_3_1_2',      [-3.5,0.5,-3.5,3.5]},
            {'Ascher(2,2,2)-ERK',     'ASCHER-ERK-3-1-2',     'ARKODE_ASCHER_ERK_3_1_2',    [-3.5,0.5,-3.5,3.5]},
      };
@@ -121,11 +121,6 @@ if (do_imex)
            {'Giraldo-ARK2-ERK',      'Giraldo-ARK2-ESDIRK',     'ARK2-3-1-2',           'ARKODE_ARK2_3_1_2',          [-3,1,-3,3]},
            {'SSP(4,3)-ERK',          'SSP(4,3)-ESDIRK',         'SSP-ARK-4-2-3',        'ARKODE_SSP_ARK_4_2_3',       [-8,0.5,-4,4]},
            {'SSP(9,3)-ERK',          'SSP(9,3)-ESDIRK',         'SSP-ARK-9-2-3',        'ARKODE_SSP_ARK_9_2_3',       [-13.5,1,-9,9]},
-           {'ARK3(2)4L[2]SA-ERK',    'ARK3(2)4L[2]SA-ESDIRK',   'ARK324L2SA-4-2-3',     'ARKODE_ARK324L2SA_4_2_3',    [-5,1,-4,4]},
-           {'ARK4(3)6L[2]SA-ERK',    'ARK4(3)6L[2]SA-ESDIRK',   'ARK436L2SA-6-3-4',     'ARKODE_ARK436L2SA_6_3_4',    [-5,2,-6,6]},
-           {'ARK4(3)7L[2]SA-ERK',    'ARK4(3)7L[2]SA-ESDIRK',   'ARK437L2SA-7-3-4',     'ARKODE_ARK437L2SA_7_3_4',    [-8,2,-6,6]},
-           {'ARK5(4)8L[2]SA-ERK',    'ARK5(4)8L[2]SA-ESDIRK',   'ARK548L2SA-8-4-5',     'ARKODE_ARK548L2SA_8_4_5',    [-5,0.5,-4,4]},
-           {'ARK5(4)8L[2]SAb-ERK',   'ARK5(4)8L[2]SAb-ESDIRK',  'ARK548L2SAb-8-4-5',    'ARKODE_ARK548L2SAb_8_4_5',   [-5,2,-5,5]},
      };
 
   fprintf('                             |     | Method | Embedding |\n');
