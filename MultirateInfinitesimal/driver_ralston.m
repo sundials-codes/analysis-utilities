@@ -1,4 +1,4 @@
-function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
+function driver_ralston(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS)
 
   addpath('../RungeKutta')
 
@@ -22,6 +22,11 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
   Ae = [zed, zed, zed;
         two/three, zed, zed;
         one/four, three/four, zed];
+  if embedding
+    btmp = be;
+    be = de;
+    de = btmp;
+  end
   Be = [c, Ae; 2, be; 1, de];
   bi = 0;
   di = 0;
@@ -36,7 +41,11 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
 
   % generate joint stability plot for this as an MRI-GARK method
   if (plotMRI)
-    fprintf('\nPlotting MRI joint stability region for %s method\n', mname)
+    if embedding
+      fprintf('\nPlotting MRI joint stability region for %s method\n', mname)
+    else
+      fprintf('\nPlotting MRI joint stability region for %s embedding\n', mname)
+    end
 
     % convert Butcher tables to MRI "Gamma" and "Omega" matrices
     [cmri, Wmri] = mis_to_mri(Be);
@@ -64,7 +73,11 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
                   [0.4660 0.6740 0.1880],[0.3010 0.7450 0.9330],[0.6350 0.0780 0.1840]};
     plotlinestyle = {'-','--','-.',':','-','--'};
 
-    filename = ['mri_',fname,'_alpha_',num2str(maxAlpha),'.mat'];
+    if embedding
+      filename = ['mri_',fname,'_alpha_',num2str(maxAlpha),'.mat'];
+    else
+      filename = ['mri_',fname,'_alpha_',num2str(maxAlpha),'_embedding.mat'];
+    end
     q = matfile(filename,'Writable',true);
     q.box = box;
     q.maxAlpha = maxAlpha;
@@ -107,21 +120,29 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     lgd.Location = 'best';
     lgd.Title.String = '\theta values';
 
-    plotname = ['mri_',fname,'_alpha_',num2str(maxAlpha)];
+    if embedding
+      plotname = ['mri_',fname,'_alpha_',num2str(maxAlpha)];
+    else
+      plotname = ['mri_',fname,'_alpha_',num2str(maxAlpha),'_embedding'];
+    end
     print('-dpng',plotname);
     savefig(plotname);
 
   end
 
+
   % generate joint stability plot for this as an ExtSTS method
   if (plotExtSTS)
-    fprintf('\nPlotting ExtSTS joint stability region for %s method\n', mname)
+    if embedding
+      fprintf('\nPlotting ExtSTS joint stability region for %s embedding\n', mname)
+    else
+      fprintf('\nPlotting ExtSTS joint stability region for %s method\n', mname)
+    end
 
     % test parameters
     box = [-2.5,0.5,-2.5,2.5];
     thetavals = [0];  % maxRxAngle values
     numDiff = 3;
-    %maxDiff = 1e2;
     maxDiff = 1e6;
     numRxRadii = 1;
     numRxAngle = 1;
@@ -132,7 +153,11 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     plotlinestyle = {'-','--','-.',':','-','--'};
 
     % RKC
-    filename = ['extsts_',fname,'_rkc.mat'];
+    if embedding
+      filename = ['extsts_',fname,'_embedding_rkc.mat'];
+    else
+      filename = ['extsts_',fname,'_rkc.mat'];
+    end
     q = matfile(filename,'Writable',true);
     q.box = box;
     q.thetavals = thetavals;
@@ -164,18 +189,30 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     xax = plot( linspace(xl(1),xl(2),10), zeros(1,10), 'k:');
     yax = plot( zeros(1,10), linspace(yl(1),yl(2),10), 'k:');
     hold off
-    tstring = ['ExtSTS joint stability -- ', mname,' + RKC'];
+    if embedding
+      tstring = ['ExtSTS joint stability -- ', mname,' + RKC'];
+    else
+      tstring = ['ExtSTS joint stability -- ', mname,' embedding + RKC'];
+    end
     title(tstring);
     lgd = legend('Base','ExtSTS');
     lgd.Location = 'best';
 
-    plotfile = ['extsts_',fname,'_rkc'];
+    if embedding
+      plotfile = ['extsts_',fname,'_rkc'];
+    else
+      plotfile = ['extsts_',fname,'_embedding_rkc'];
+    end
     print('-dpng',plotfile);
     savefig(plotfile);
 
 
     % RKL
-    filename = ['extsts_',fname,'_rkl.mat'];
+    if embedding
+      filename = ['extsts_',fname,'_rkl.mat'];
+    else
+      filename = ['extsts_',fname,'_embedding_rkl.mat'];
+    end
     q = matfile(filename,'Writable',true);
     q.box = box;
     q.thetavals = thetavals;
@@ -207,12 +244,20 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     xax = plot( linspace(xl(1),xl(2),10), zeros(1,10), 'k:');
     yax = plot( zeros(1,10), linspace(yl(1),yl(2),10), 'k:');
     hold off
-    tstring = ['ExtSTS joint stability -- ', mname,' + RKL'];
+    if embedding
+      tstring = ['ExtSTS joint stability -- ', mname,' + RKL'];
+    else
+      tstring = ['ExtSTS joint stability -- ', mname,' embedding + RKL'];
+    end
     title(tstring);
     lgd = legend('Base','ExtSTS');
     lgd.Location = 'best';
 
-    plotfile = ['extsts_',fname,'_rkl'];
+    if embedding
+      plotfile = ['extsts_',fname,'_rkl'];
+    else
+      plotfile = ['extsts_',fname,'_embedding_rkl'];
+    end
     print('-dpng',plotfile);
     savefig(plotfile);
 

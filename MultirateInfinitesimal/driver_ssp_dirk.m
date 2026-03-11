@@ -1,4 +1,4 @@
-function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
+function driver_ssp_dirk(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS)
 
   addpath('../RungeKutta')
 
@@ -24,6 +24,11 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
         zed, zed, one/two, zed, one/two, zed];
   bi = [zed, zed, one/two, zed, one/two, zed];
   di = [zed, zed, five/twelve, zed, seven/twelve, zed];
+  if embedding
+    btmp = bi;
+    bi = di;
+    di = btmp;
+  end
   Bi = [c, Ai; 2, bi; 1, di];
   Ae = 0;
   be = 0;
@@ -66,7 +71,11 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
                   [0.4660 0.6740 0.1880],[0.3010 0.7450 0.9330],[0.6350 0.0780 0.1840]};
     plotlinestyle = {'-','--','-.',':','-','--'};
 
-    filename = ['mri_',fname,'_alpha_',num2str(maxAlpha),'.mat'];
+    if embedding
+      filename = ['mri_',fname,'_alpha_',num2str(maxAlpha),'_embedding.mat'];
+    else
+      filename = ['mri_',fname,'_alpha_',num2str(maxAlpha),'.mat'];
+    end
     q = matfile(filename,'Writable',true);
     q.box = box;
     q.maxalpha = maxalpha;
@@ -109,7 +118,11 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     lgd.Location = 'best';
     lgd.Title.String = '\theta values';
 
-    plotname = ['mri_',fname,'_alpha_',num2str(maxAlpha)];
+    if embedding
+      plotname = ['mri_',fname,'_alpha_',num2str(maxAlpha),'_embedding'];
+    else
+      plotname = ['mri_',fname,'_alpha_',num2str(maxAlpha)];
+    end
     print('-dpng',plotname);
     savefig(plotname);
 
@@ -117,7 +130,11 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
 
   % generate joint stability plot for this as an ExtSTS method
   if (plotExtSTS)
-    fprintf('\nPlotting ExtSTS joint stability region for %s method\n', mname)
+    if embedding
+      fprintf('\nPlotting ExtSTS joint stability region for %s embedding\n', mname)
+    else
+      fprintf('\nPlotting ExtSTS joint stability region for %s method\n', mname)
+    end
 
     % test parameters
     box = [-5,25,-15,15];
@@ -134,7 +151,11 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     plotlinestyle = {'-','--','-.',':','-','--'};
 
     % RKC
-    filename = ['extsts_',fname,'_rkc.mat'];
+    if embedding
+      filename = ['extsts_',fname,'_embedding_rkc.mat'];
+    else
+      filename = ['extsts_',fname,'_rkc.mat'];
+    end
     q = matfile(filename,'Writable',true);
     q.box = box;
     q.numDiff = numDiff;
@@ -167,19 +188,31 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     xax = plot( linspace(xl(1),xl(2),10), zeros(1,10), 'k:');
     yax = plot( zeros(1,10), linspace(yl(1),yl(2),10), 'k:');
     hold off
-    tstring = ['ExtSTS joint stability -- ', mname,' + RKC'];
+    if embedding
+      tstring = ['ExtSTS joint stability -- ', mname,' embedding + RKC'];
+    else
+      tstring = ['ExtSTS joint stability -- ', mname,' + RKC'];
+    end
     title(tstring);
     lgd = legend(header);
     lgd.Location = 'northeast';
     lgd.Title.String = '\rho values';
 
-    plotfile = ['extsts_',fname,'_rkc'];
+    if embedding
+      plotfile = ['extsts_',fname,'_embedding_rkc'];
+    else
+      plotfile = ['extsts_',fname,'_rkc'];
+    end
     print('-dpng',plotfile);
     savefig(plotfile);
 
 
     % RKL
-    filename = ['extsts_',fname,'_rkl.mat'];
+    if embedding
+      filename = ['extsts_',fname,'_embedding_rkl.mat'];
+    else
+      filename = ['extsts_',fname,'_rkl.mat'];
+    end
     q = matfile(filename,'Writable',true);
     q.box = box;
     q.numDiff = numDiff;
@@ -210,13 +243,21 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     xax = plot( linspace(xl(1),xl(2),10), zeros(1,10), 'k:');
     yax = plot( zeros(1,10), linspace(yl(1),yl(2),10), 'k:');
     hold off
-    tstring = ['ExtSTS joint stability -- ', mname,' + RKL'];
+    if embedding
+      tstring = ['ExtSTS joint stability -- ', mname,' embedding + RKL'];
+    else
+      tstring = ['ExtSTS joint stability -- ', mname,' + RKL'];
+    end
     title(tstring);
     lgd = legend(header);
     lgd.Location = 'northeast';
     lgd.Title.String = '\rho values';
 
-    plotfile = ['extsts_',fname,'_rkl'];
+    if embedding
+      plotfile = ['extsts_',fname,'_embedding_rkl'];
+    else
+      plotfile = ['extsts_',fname,'_rkl'];
+    end
     print('-dpng',plotfile);
     savefig(plotfile);
 

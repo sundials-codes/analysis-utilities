@@ -1,4 +1,4 @@
-function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
+function driver_ars222(maxAlpha,embedding,plotImEx,plotImExMRI,plotExtSTS)
 
   addpath('../RungeKutta')
 
@@ -22,6 +22,11 @@ function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
         gamma, zed, zed, zed, zed;
         delta, zed, one-delta, zed, zed;
         delta, zed, one-delta, zed, zed];
+  if embedding
+    btmp = be;
+    be = de;
+    de = btmp;
+  end
   Be = [c, Ae; 2, be; 1, de];
   bi = [zed, zed, one-gamma, zed, gamma];
   di = de;
@@ -30,6 +35,11 @@ function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
         zed, zed, gamma, zed, zed;
         zed, zed, one, zed, zed;
         zed, zed, one-gamma, zed, gamma];
+  if embedding
+    btmp = bi;
+    bi = di;
+    di = btmp;
+  end
   Bi = [c, Ai; 2, bi; 1, di];
 
   % verify properties and generate plots of ImEx-ARK method
@@ -40,7 +50,11 @@ function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
 
   % generate joint stability plot for this as an ImEx-MRI-GARK method
   if (plotImExMRI)
-    fprintf('\nPlotting MRI joint stability region for %s method\n', mname)
+    if embedding
+      fprintf('\nPlotting MRI joint stability region for %s embedding\n', mname)
+    else
+      fprintf('\nPlotting MRI joint stability region for %s method\n', mname)
+    end
 
     % convert Butcher tables to MRI "Gamma" and "Omega" matrices
     [cmri, Wmri] = mis_to_mri(Be);
@@ -73,7 +87,11 @@ function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
                   [0.4660 0.6740 0.1880],[0.3010 0.7450 0.9330],[0.6350 0.0780 0.1840]};
     plotlinestyle = {'-','--','-.',':','-','--'};
 
-    filename = ['imexmri_',fname,'_alpha_',num2str(maxAlpha),'.mat'];
+    if embedding
+      filename = ['imexmri_',fname,'_alpha_',num2str(maxAlpha),'_embedding.mat'];
+    else
+      filename = ['imexmri_',fname,'_alpha_',num2str(maxAlpha),'.mat'];
+    end
     q = matfile(filename,'Writable',true);
     q.box = box;
     q.maxAlpha = maxAlpha;
@@ -116,7 +134,11 @@ function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
     lgd.Location = 'best';
     lgd.Title.String = '\theta values';
 
-    plotname = ['imexmri_',fname,'_alpha_',num2str(maxAlpha)];
+    if embedding
+      plotname = ['imexmri_',fname,'_alpha_',num2str(maxAlpha),'_embedding'];
+    else
+      plotname = ['imexmri_',fname,'_alpha_',num2str(maxAlpha)];
+    end
     print('-dpng',plotname);
     savefig(plotname);
 
@@ -124,12 +146,15 @@ function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
 
   % generate joint stability plot for this as an ExtSTS method
   if (plotExtSTS)
-    fprintf('\nPlotting ExtSTS joint stability region for %s method\n', mname)
+    if embedding
+      fprintf('\nPlotting ExtSTS joint stability region for %s embedding\n', mname)
+    else
+      fprintf('\nPlotting ExtSTS joint stability region for %s method\n', mname)
+    end
 
     % test parameters
     thetavals = [20,40,60,80];
     numDiff = 3;
-    %maxDiff = 1e2;
     maxDiff = 1e6;
     numRxRadii = 3;
     numRxAngle = 2;
@@ -141,7 +166,11 @@ function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
     plotlinestyle = {'-','--','-.',':','-','--'};
 
     % RKC
-    filename = ['extsts_',fname,'_rkc.mat'];
+    if embedding
+      filename = ['extsts_',fname,'_embedding_rkc.mat'];
+    else
+      filename = ['extsts_',fname,'_rkc.mat'];
+    end
     q = matfile(filename,'Writable',true);
     q.box = box;
     q.thetavals = thetavals;
@@ -175,19 +204,31 @@ function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
     xax = plot( linspace(xl(1),xl(2),10), zeros(1,10), 'k:');
     yax = plot( zeros(1,10), linspace(yl(1),yl(2),10), 'k:');
     hold off
-    tstring = ['ExtSTS joint stability -- ', mname,' + RKC'];
+    if embedding
+      tstring = ['ExtSTS joint stability -- ', mname,' embedding + RKC'];
+    else
+      tstring = ['ExtSTS joint stability -- ', mname,' + RKC'];
+    end
     title(tstring);
     lgd = legend(header);
     lgd.Location = 'best';
     lgd.Title.String = '\theta values';
 
-    plotfile = ['extsts_',fname,'_rkc'];
+    if embedding
+      plotfile = ['extsts_',fname,'_embedding_rkc'];
+    else
+      plotfile = ['extsts_',fname,'_rkc'];
+    end
     print('-dpng',plotfile);
     savefig(plotfile);
 
 
     % RKL
-    filename = ['extsts_',fname,'_rkl.mat'];
+    if embedding
+      filename = ['extsts_',fname,'_embedding_rkl.mat'];
+    else
+      filename = ['extsts_',fname,'_rkl.mat'];
+    end
     q = matfile(filename,'Writable',true);
     q.box = box;
     q.thetavals = thetavals;
@@ -219,13 +260,21 @@ function driver_ars222(maxAlpha,plotImEx,plotImExMRI,plotExtSTS)
     xax = plot( linspace(xl(1),xl(2),10), zeros(1,10), 'k:');
     yax = plot( zeros(1,10), linspace(yl(1),yl(2),10), 'k:');
     hold off
-    tstring = ['ExtSTS joint stability -- ', mname,' + RKL'];
+    if embedding
+      tstring = ['ExtSTS joint stability -- ', mname,' embedding + RKL'];
+    else
+      tstring = ['ExtSTS joint stability -- ', mname,' + RKL'];
+    end
     title(tstring);
     lgd = legend(header);
     lgd.Location = 'best';
     lgd.Title.String = '\theta values';
 
-    plotfile = ['extsts_',fname,'_rkl'];
+    if embedding
+      plotfile = ['extsts_',fname,'_embedding_rkl'];
+    else
+      plotfile = ['extsts_',fname,'_rkl'];
+    end
     print('-dpng',plotfile);
     savefig(plotfile);
 
