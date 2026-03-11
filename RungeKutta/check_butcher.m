@@ -253,7 +253,7 @@ for i=0:length(beta)-1
    end
 end
 if (dendeg > numdeg)
-  Ls = 1;
+   Ls = 1;
 else
    if ((dendeg == numdeg) && (abs(alpha(end))/abs(beta(end)) < tol*10))
      Ls = 1;

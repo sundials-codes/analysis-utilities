@@ -18,7 +18,7 @@ plotdir = '.';        % folder to use for stability region plots
 plotregions = true;   % create stability region plots
 use_symbolic = false; % use symbolic storage for tables
 reportL = 1;          % level of reporting output from check_* routines
-do_explicit = false;
+do_explicit = true;
 do_implicit = true;
 do_imex = true;
 
