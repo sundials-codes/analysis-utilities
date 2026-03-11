@@ -43,17 +43,15 @@ alpha = fliplr(coeffs(n,z,'All'));
 beta = fliplr(coeffs(d,z,'All'));
 
 % scale both so that constant terms are at most 1
-if (~isa(alpha(1),'sym'))
-   if (abs(alpha(1)) > abs(beta(1)))
-      beta = beta / alpha(1);
-      alpha = alpha / alpha(1);
-   else
-      alpha = alpha / beta(1);
-      beta = beta / beta(1);
-   end
+if (abs(alpha(1)) > abs(beta(1)))
+   beta = beta / alpha(1);
+   alpha = alpha / alpha(1);
+else
+   alpha = alpha / beta(1);
+   beta = beta / beta(1);
 end
 
-% remove any trailing zeros for non-symbolic coefficients
+% remove any trailing zeros: do this separately for symbolic and non-symbolic coefficients
 if (~isa(alpha(1),'sym'))
    for i=1:length(alpha)-1
       if (abs(alpha(end)) < 1e-18)
@@ -64,6 +62,21 @@ if (~isa(alpha(1),'sym'))
    end
    for i=1:length(beta)-1
       if (abs(beta(end)) < 1e-18)
+         beta = beta(1:end-1);
+      else
+         break;
+      end
+   end
+else
+   for i=1:length(alpha)-1
+      if (abs(alpha(end)) == 0)
+         alpha = alpha(1:end-1);
+      else
+         break;
+      end
+   end
+   for i=1:length(beta)-1
+      if (abs(beta(end)) == 0)
          beta = beta(1:end-1);
       else
          break;

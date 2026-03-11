@@ -242,20 +242,20 @@ end
 %   conclude L-stability anyways.
 numdeg = length(alpha)-1;
 for i=0:length(alpha)-1
-   if (abs(alpha(end-i)) < tol^2)
+   if (abs(alpha(end-i)) < tol*10)
       numdeg = numdeg-1;
    end
 end
 dendeg = length(beta)-1;
 for i=0:length(beta)-1
-   if (abs(beta(end-i)) < tol^2)
+   if (abs(beta(end-i)) < tol*10)
       dendeg = dendeg-1;
    end
 end
 if (dendeg > numdeg)
    Ls = 1;
 else
-   if (abs(alpha(end))/abs(beta(end)) < 1e-14)
+   if ((dendeg == numdeg) && (abs(alpha(end))/abs(beta(end)) < tol*10))
      Ls = 1;
    else
      Ls = 0;

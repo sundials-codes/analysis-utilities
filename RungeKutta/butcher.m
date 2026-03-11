@@ -868,7 +868,7 @@ elseif (strcmp(method_name,'Ascher(2,2,2)-ERK'))
    delta = v(1)-v(1)/(v(2)*gamma);
    c = [z; gamma; v(1)];
    b = [delta, v(1)-delta, z];
-   b2 = [z, v(2)/v(3), v(1)/v(3)];
+   b2 = [z, v(3)/v(5), v(2)/v(5)];
    A = [z, z, z;
         gamma, z, z;
         delta, v(1)-delta, z];
@@ -881,7 +881,7 @@ elseif (strcmp(method_name,'Ascher(2,2,2)-SDIRK'))
    gamma = (v(2)-sqrt(v(2)))/v(2);
    c = [z; gamma; v(1)];
    b = [z, v(1)-gamma, gamma];
-   b2 = [z, v(2)/v(3), v(1)/v(3)];
+   b2 = [z, v(3)/v(5), v(2)/v(5)];
    A = [z, z,       z;
         z, gamma,   z;
         z, v(1)-gamma, gamma];
@@ -1133,7 +1133,6 @@ elseif (strcmp(method_name,'SSP(4,3)-ERK'))
          v(1)/v(6), v(1)/v(6), v(1)/v(6), z];
    b = [ v(1)/v(6), v(1)/v(6), v(1)/v(6), v(1)/v(2)];
    b2 = [ v(1)/v(4), v(1)/v(4), v(1)/v(4), v(1)/v(4)];
-   %b2 = [ v(1)/v(3), v(1)/v(3), v(1)/v(3), z];
    c = sum(A,2);
    q = 3;
    p = 2;
@@ -1141,12 +1140,11 @@ elseif (strcmp(method_name,'SSP(4,3)-ERK'))
 
 elseif (strcmp(method_name,'SSP(4,3)-ESDIRK'))
 
-   sq3 = sqrt(v(3));
-   gam = (v(3) + sq3)/v(6);
+   gam = v(0.43586652150845899941601945119355684);
    A = [ z, z, z, z;
-         -sq3/v(6), gam, z, z;
-         (v(3) + sq3)/v(3), -(v(1)+sq3)/v(2), gam, z;
-         v(1)/v(6), -(v(1)+sq3)/v(6), z, gam];
+         v(0.064133478491541000583980548806443157), gam, z, z;
+         v(0.39641166139746771164632267806938966), v(0.16772181709407328893765787073705349), gam, z;
+         v(-0.49838612606484063319986117825862669), v(1.3860128578277056960456083134296045), v(-0.8234932532713240622617665863645347), gam];
    b = [ v(1)/v(6), v(1)/v(6), v(1)/v(6), v(1)/v(2)];
    b2 = [ v(1)/v(4), v(1)/v(4), v(1)/v(4), v(1)/v(4)];
    c = sum(A,2);
@@ -1154,7 +1152,7 @@ elseif (strcmp(method_name,'SSP(4,3)-ESDIRK'))
    p = 2;
    B = [c, A; q, b; p, b2];
 
-elseif (strcmp(method_name,'SSP(9,3)-DIRK'))
+elseif (strcmp(method_name,'SSP(9,3)-ESDIRK'))
 
    A = [ z, z, z, z, z, z, z, z, z;
          -v(2)/v(15), v(3)/v(10), z, z, z, z, z, z, z;
@@ -2171,7 +2169,7 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lpum-SDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-ERK'))
-  % explicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1137/040612968
+  % explicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1137/040612968 (custom embedding)
 
    A = [    z,     z, z;...
           v(5)/v(6),     z, z;...
@@ -2184,7 +2182,7 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-SDIRK'))
-  % implicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1137/040612968
+  % implicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1137/040612968 (custom embedding)
 
    A = [        v(2)/v(11),      z,    z;...
              v(205)/v(462),   v(2)/v(11),    z;...

@@ -27,7 +27,7 @@ function joint_stab_region(AE,AI,bE,bI,thetas,box,fig)
 % (b) it contains infinitely many angles 0 <= alpha <= theta.
 % However, we only test this for the two angles alpha=0 and
 % alpha=theta, using 10000 points, with distance logarithmically-
-% scaled away from the origin, to a maximum distance of 1e10.
+% scaled away from the origin, to a maximum distance of 1e8.
 % Similarly, we only test a 1000^2 mesh of points zE within the
 % pre-defined "box" in the complex plane.
 %
