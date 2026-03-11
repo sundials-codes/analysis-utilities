@@ -50,7 +50,7 @@ function driver_giraldo_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     % and remove embedding row
     Gm = Gmri{1};
     G{1} = [zeros(1,6); Gm(1:end-1,:)];
-    W = {};
+    W{1} = 0*G{1};
 
     % set "dc" increment array (pad with initial 0)
     dc = [0; c(2:end)-c(1:end-1)];
@@ -115,11 +115,13 @@ function driver_giraldo_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
 
   end
 
+
   % generate joint stability plot for this as an ExtSTS method
   if (plotExtSTS)
-    fprintf('\nPlotting ExtSTS joint stability regions for %s method\n', mname)
+    fprintf('\nPlotting ExtSTS joint stability region for %s method\n', mname)
 
     % test parameters
+    box = [-5,110,-55,55];
     numDiff = 3;
     maxDiff = [1, 1e2, 1e4, 1e6];
     numRxRadii = 1;

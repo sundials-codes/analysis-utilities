@@ -50,7 +50,7 @@ function driver_ssp_dirk(maxAlpha,plotRK,plotMRI,plotExtSTS)
     % and remove embedding row
     Gm = Gmri{1};
     G{1} = [zeros(1,6); Gm(1:end-1,:)];
-    W = {};
+    W{1} = 0*G{1};
 
     % set "dc" increment array (pad with initial 0)
     dc = [0; c(2:end)-c(1:end-1)];

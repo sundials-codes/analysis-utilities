@@ -148,7 +148,9 @@ function [p,M,N] = zf_dependent_fns(G,W,dc,plottype)
   phi_0 = @(z) exp(z);
   phi_k = @(k,z)  int(exp(z.*(1-t)).*t.^(k-1),t,0,1);
 
-  nummatrices = length(G);                   % number of coefficient matrices for G/W
+  numGmatrices = length(G);                  % number of coefficient matrices for G
+  numWmatrices = length(W);                  % number of coefficient matrices for W
+  nummatrices = max(numGmatrices,numWmatrices); % maximum number of coefficient matrices
   s = length(dc);                            % number of stages
 
   % initialize storage
@@ -167,15 +169,26 @@ function [p,M,N] = zf_dependent_fns(G,W,dc,plottype)
     end
 
     % compute sum_{k>=0} diag(phi_{k+1}(dc*zf))*G{k} & sum_{k>=0} diag(phi_{k+1}(dc*zf))*W{k}
-    for k = 1:nummatrices
-      Nzf = Nzf + diag(phivals(:,k+1))*W{k};
+    for k = 1:numGmatrices
       Mzf = Mzf + diag(phivals(:,k+1))*G{k};
+    end
+    for k = 1:numWmatrices
+      Nzf = Nzf + diag(phivals(:,k+1))*W{k};
     end
 
     % Convert to matlab anonymous functions
     M = matlabFunction(Mzf);
     N = matlabFunction(Nzf);
     p = matlabFunction(phivals);
+    if (nargin(M) == 0)
+      M = @(z) Mzf;
+    end
+    if (nargin(N) == 0)
+      N = @(z) Nzf;
+    end
+    if (nargin(p) == 0)
+      p = @(z) phivals;
+    end
 
   case {'implicit','explicit','imex'}
     % No fast dependency, matrices are constant
@@ -186,9 +199,11 @@ function [p,M,N] = zf_dependent_fns(G,W,dc,plottype)
       end
     end
 
-    for k = 1:nummatrices
-      Nzf = Nzf + diag(phivals(:,k+1))*W{k};
+    for k = 1:numGmatrices
       Mzf = Mzf + diag(phivals(:,k+1))*G{k};
+    end
+    for k = 1:numWmatrices
+      Nzf = Nzf + diag(phivals(:,k+1))*W{k};
     end
 
     M = @(z) double(Mzf);

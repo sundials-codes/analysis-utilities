@@ -48,7 +48,7 @@ function driver_ralston(maxAlpha,plotRK,plotMRI,plotExtSTS)
     % and remove embedding row
     Wm = Wmri{1};
     W{1} = [zeros(1,3); Wm(1:end-1,:)];
-    G{1} = {};
+    G{1} = 0*W{1};
 
     % set "dc" increment array (pad with initial 0)
     dc = [0; c(2:end)-c(1:end-1)];
