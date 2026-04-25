@@ -39,15 +39,21 @@ if (sum(abs(triu(A,1))) > 100*eps)
    error('Invalid input table, must be at most diagonally implicit')
 end
 
+if embedded
+   d = B(s+2,2:s+1);
+end
+
 % determine whether the table needs padding
 if ((norm(A(s,:)-b) > 100*eps) || (abs(c(s)-1) > 100*eps))
    c = [c; 1];
    A = [A, zeros(s,1); b, 0];
+   if embedded
+      d = [d, 0];
+   end
 end
 
 % construct output G and return (c was already computed)
 if embedded
-   d = B(s+2,2:s+1);
    G{1} = [A(2:end,:) - A(1:end-1,:); d - A(end-1,:)];
 else
    G{1} = A(2:end,:) - A(1:end-1,:);

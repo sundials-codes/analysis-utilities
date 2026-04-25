@@ -1,27 +1,17 @@
-function newdriver_ssp_dirk(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS)
+function newdriver_irk21a(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS)
 
   addpath('../RungeKutta')
 
   box = [-5,25,-15,15];
-  mname = 'SSP-DIRK2';
-  fname = 'SSPDIRK2';
+  mname = 'IRK21a';
+  fname = 'IRK21a';
 
-  zed = 0;
-  one = 1;
-  two = 2;
-  five = 5;
-  seven = 7;
-  twelve = 12;
-  gamma = one - one / sqrt(two);
-  c = [zed; gamma; gamma; one-gamma; one-gamma; one];
-  Ai = [zed, zed, zed, zed, zed, zed;
-        gamma, zed, zed, zed, zed, zed;
-        zed, zed, gamma, zed, zed, zed;
-        zed, zed, one-gamma, zed, zed, zed;
-        zed, zed, one-two*gamma, zed, gamma, zed;
-        zed, zed, one/two, zed, one/two, zed];
-  bi = [zed, zed, one/two, zed, one/two, zed];
-  di = [zed, zed, five/twelve, zed, seven/twelve, zed];
+  c = [0; 1; 1];
+  Ai = [0, 0, 0;
+        1, 0, 0;
+        0.5, 0, 0.5];
+  bi = [0.5, 0, 0.5];
+  di = [0, 0, 1];
 
   if embedding
     btmp = bi;

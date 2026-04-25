@@ -23,6 +23,8 @@ driver_giraldo_dirk(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS);  % Impl-ExtST
 driver_ralston(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS);       % Expl-ExtSTS
 driver_heuneuler(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS);     % Expl-ExtSTS
 driver_ssp_dirk(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS);      % Impl-ExtSTS
+driver_erk22a(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS);        # Expl-ExtSTS
+driver_irk21a(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS);        # Impl-ExtSTS
 
 
 % control flags
@@ -46,6 +48,8 @@ driver_giraldo_dirk(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS);  % Impl-ExtST
 driver_ralston(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS);       % Expl-ExtSTS
 driver_heuneuler(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS);     % Expl-ExtSTS
 driver_ssp_dirk(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS);      % Impl-ExtSTS
+driver_erk22a(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS);        # Expl-ExtSTS
+driver_irk21a(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS);        # Impl-ExtSTS
 
 
 

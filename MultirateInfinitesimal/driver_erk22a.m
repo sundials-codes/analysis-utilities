@@ -1,25 +1,16 @@
-function newdriver_ralston(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS)
+function newdriver_erk22a(maxAlpha,embedding,plotRK,plotMRI,plotExtSTS)
 
   addpath('../RungeKutta')
 
-  box = [-3,0.5,-2.5,2.5];
-  mname = 'Ralston';
-  fname = 'Ralston';
+  box = [-5,0.5,-3,3];
+  mname = 'ERK22a';
+  fname = 'ERK22a';
 
-  zed = 0;
-  one = 1;
-  two = 2;
-  three = 3;
-  four = 4;
-  d1 = 5/37;
-  d2 = two/three;
-  d3 = 22/111;
-  c = [zed; two/three; one];
-  be = [one/four, three/four, zed];
-  de = [d1, d2, d3];
-  Ae = [zed, zed, zed;
-        two/three, zed, zed;
-        one/four, three/four, zed];
+  c = [0; 1];
+  be = [0, 1];
+  de = [1, 0];
+  Ae = [0, 0;
+        0.5, 0];
 
   if embedding
     btmp = be;
