@@ -4203,7 +4203,8 @@ if (doPlot)
 %   stab_region(double(AE), double(dE), box, fig, 'g-', 'ERK embedding');
 %   stab_region(double(AI), double(bI), box, fig, 'b-', 'DIRK');
 %   stab_region(double(AI), double(dI), box, fig, 'm-', 'DIRK embedding');
-   thetas = [0, 20, 40, 60, 80];
+   %thetas = [0, 20, 40, 60, 80];
+   thetas = [0, 15, 30, 45, 60, 75, 90];
    joint_stab_region(double(AE),double(AI),double(bE),double(bI),thetas,box,fig);
    set(get(get(xax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');
    set(get(get(yax,'Annotation'),'LegendInformation'), 'IconDisplayStyle','off');

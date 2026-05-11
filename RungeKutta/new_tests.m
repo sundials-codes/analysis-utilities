@@ -121,6 +121,11 @@ if (do_imex)
            {'Giraldo-ARK2-ERK',      'Giraldo-ARK2-ESDIRK',     'ARK2-3-1-2',           'ARKODE_ARK2_3_1_2',          [-3,1,-3,3]},
            {'SSP(4,3)-ERK',          'SSP(4,3)-ESDIRK',         'SSP-ARK-4-2-3',        'ARKODE_SSP_ARK_4_2_3',       [-8,0.5,-4,4]},
            {'SSP(9,3)-ERK',          'SSP(9,3)-ESDIRK',         'SSP-ARK-9-2-3',        'ARKODE_SSP_ARK_9_2_3',       [-13.5,1,-9,9]},
+           {'ARK3(2)4L[2]SA-ERK',    'ARK3(2)4L[2]SA-ESDIRK',   'ARK324L2SA-4-2-3',     'ARKODE_ARK324L2SA_4_2_3',    [-4.0,0.5,-4.0,4.0]},
+           {'ARK4(3)6L[2]SA-ERK',    'ARK4(3)6L[2]SA-ESDIRK',   'ARK436L2SA-6-3-4',     'ARKODE_ARK436L2SA_6_3_4',    [-5.0,1.0,-5.0,5.0]},
+           {'ARK4(3)7L[2]SA-ERK',    'ARK4(3)7L[2]SA-ESDIRK',   'ARK437L2SA-7-3-4',     'ARKODE_ARK437L2SA_7_3_4',    [-4.0,0.5,-3.0,3.0]},
+           {'ARK5(4)8L[2]SA-ERK',    'ARK5(4)8L[2]SA-ESDIRK',   'ARK548L2SA-8-4-5',     'ARKODE_ARK548L2SA_8_4_5',    [-5.0,1.0,-4.0,4.0]},
+           {'ARK5(4)8L[2]SAb-ERK',   'ARK5(4)8L[2]SAb-ESDIRK',  'ARK548L2SAb-8-4-5',    'ARKODE_ARK548L2SAb_8_4_5',   [-5.0,1.0,-4.0,4.0]},
      };
 
   fprintf('                             |     | Method | Embedding |\n');
