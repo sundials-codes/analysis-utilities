@@ -90,7 +90,7 @@ function B = butcher(method_name,symbolic)
 %                 DBM-5-3-ERK  |  5 |  3   3  | 1e-15
 %                3/8-Rule-ERK  |  4 |  4   4  | 1e-40
 %                     ERK-4-4  |  4 |  4   4  | 1e-40
-%                 Cooper6-ERK  |  6 |  4-  4  | 1e-40
+%                 Cooper6-ERK  |  6 |  4   4  | 1e-40
 %             Butcher-7-6-ERK  |  7 |  6   6  | 1e-40
 %            Butcher-7-6b-ERK  |  7 |  6   6  | 1e-40
 %             Butcher-9-7-ERK  |  9 |  6+  7  | 1e-40
@@ -162,7 +162,7 @@ function B = butcher(method_name,symbolic)
 %              DBM-5-3-ESDIRK  |  5 |  3   3   Y       Y  |  1  1e-16
 %             SDIRK4()5L[1]SA  |  5 |  4   4   Y       Y  |  1  1e-40
 %               SDIRK5()5L[1]  |  5 |  5   5   Y       Y  |  1  1e-25
-%              Cooper6-ESDIRK  |  6 |  4-  4   Y          |  1  1e-40
+%              Cooper6-ESDIRK  |  6 |  4   4   Y          |  1  1e-40
 %
 %
 % Diagonally-implicit, embedded methods:
@@ -270,6 +270,8 @@ z = v(0);
 
 % set the butcher table
 if (strcmp(method_name,'DBM-5-3-ERK'))
+   % From: the DBM453 method of Vogl, Steyer, Reynolds, Ullrich & Woodward, J. Adv.
+   %       Model. Earth Syst. 11 (2019), doi: 10.1029/2019MS001700
    c = [z; v(0.1030620881159184); v(0.72139131281753662); v(1.28181117351981733); v(1) ];
    b = [ v(0.87795339639076672), v(-0.72692641526151549), v(0.7520413715737272), ...
          v(-0.22898029400415090), v(0.32591194130117246) ];
@@ -283,6 +285,8 @@ if (strcmp(method_name,'DBM-5-3-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'DBM-5-3-ESDIRK'))
+   % From: the DBM453 method of Vogl, Steyer, Reynolds, Ullrich & Woodward, J. Adv.
+   %       Model. Earth Syst. 11 (2019), doi: 10.1029/2019MS001700
    c = [z; v(0.1030620881159184); v(0.72139131281753662); v(1.28181117351981733); v(1) ];
    b = [ v(0.87795339639076672), v(-0.72692641526151549), v(0.7520413715737272), ...
          v(-0.22898029400415090), v(0.32591194130117246) ];
@@ -296,6 +300,8 @@ elseif (strcmp(method_name,'DBM-5-3-ESDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'ARK3(2)4L[2]SA-ERK'))
+   % From: Kennedy & Carpenter, Appl. Numer. Math. 44 (2003), doi:
+   %       10.1016/S0168-9274(02)00138-1
 
    c = [z; v(1767732205903)/v(2027836641118); v(3)/v(5); v(1)];
    b = [v(1471266399579)/v(7840856788654), v(-4482444167858)/v(7529755066697), ...
@@ -312,6 +318,8 @@ elseif (strcmp(method_name,'ARK3(2)4L[2]SA-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ARK3(2)4L[2]SA-ESDIRK'))
+   % From: Kennedy & Carpenter, Appl. Numer. Math. 44 (2003), doi:
+   %       10.1016/S0168-9274(02)00138-1
 
    c = [z; v(1767732205903)/v(2027836641118); v(3)/v(5); v(1)];
    b = [v(1471266399579)/v(7840856788654), v(-4482444167858)/v(7529755066697), ...
@@ -329,6 +337,8 @@ elseif (strcmp(method_name,'ARK3(2)4L[2]SA-ESDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ARK4(3)6L[2]SA-ERK'))
+   % From: Kennedy & Carpenter, Appl. Numer. Math. 44 (2003), doi:
+   %       10.1016/S0168-9274(02)00138-1
 
    c = [z; v(1)/v(2); v(83)/v(250); v(31)/v(50); v(17)/v(20); v(1)];
    b = [v(82889)/v(524892), z, v(15625)/v(83664), v(69875)/v(102672), v(-2260)/v(8211), v(1)/v(4)];
@@ -349,6 +359,8 @@ elseif (strcmp(method_name,'ARK4(3)6L[2]SA-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ARK4(3)6L[2]SA-ESDIRK'))
+   % From: Kennedy & Carpenter, Appl. Numer. Math. 44 (2003), doi:
+   %       10.1016/S0168-9274(02)00138-1
 
    c = [z; v(1)/v(2); v(83)/v(250); v(31)/v(50); v(17)/v(20); v(1)];
    b = [v(82889)/v(524892), z, v(15625)/v(83664), v(69875)/v(102672), v(-2260)/v(8211), v(1)/v(4)];
@@ -473,6 +485,8 @@ elseif (strcmp(method_name,'ESDIRK5(3)6L[2]SA'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SDIRK5()5L[1]'))
+   % From: Kennedy & Carpenter, Diagonally implicit Runge--Kutta methods for ordinary
+   %       differential equations. A review, NASA/TM-2016-219173 (2016)
 
   c = [v(4024571134387)/v(14474071345096); v(5555633399575)/v(5431021154178); v(5255299487392)/v(12852514622453); v(3)/v(20); v(10449500210709)/v(14474071345096)];
    b = [-v(2522702558582)/v(12162329469185), v(1018267903655)/v(12907234417901), v(4542392826351)/v(13702606430957), v(5001116467727)/v(12224457745473), v(1509636094297)/v(3891594770934)];
@@ -626,6 +640,8 @@ elseif (strcmp(method_name,'ESDIRK5(4I)8L[2]SA'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ARK4(3)7L[2]SA-ERK'))
+   % From: Kennedy & Carpenter, Appl. Numer. Math. 136 (2019), doi:
+   %       10.1016/j.apnum.2018.10.007
 
    c = [z; v(247)/v(1000); v(4276536705230)/v(10142255878289); v(67)/v(200); v(3)/v(40); v(7)/v(10); v(1)];
    b = [z, z, v(9164257142617)/v(17756377923965), v(-10812980402763)/v(74029279521829), ...
@@ -651,6 +667,8 @@ elseif (strcmp(method_name,'ARK4(3)7L[2]SA-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ARK4(3)7L[2]SA-ESDIRK'))
+   % From: Kennedy & Carpenter, Appl. Numer. Math. 136 (2019), doi:
+   %       10.1016/j.apnum.2018.10.007
 
    gam = v(1235)/v(10000);
    c = [z; v(247)/v(1000); v(4276536705230)/v(10142255878289); v(67)/v(200); v(3)/v(40); v(7)/v(10); v(1)];
@@ -676,6 +694,8 @@ elseif (strcmp(method_name,'ARK4(3)7L[2]SA-ESDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ARK5(4)8L[2]SA-ERK'))
+   % From: Kennedy & Carpenter, Appl. Numer. Math. 44 (2003), doi:
+   %       10.1016/S0168-9274(02)00138-1
 
    c = [z; v(41)/v(100); v(2935347310677)/v(11292855782101); ...
       v(1426016391358)/v(7196633302097); v(92)/v(100); v(24)/v(100); v(3)/v(5); v(1)];
@@ -705,6 +725,8 @@ elseif (strcmp(method_name,'ARK5(4)8L[2]SA-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ARK5(4)8L[2]SA-ESDIRK'))
+   % From: Kennedy & Carpenter, Appl. Numer. Math. 44 (2003), doi:
+   %       10.1016/S0168-9274(02)00138-1
 
    c = [z; v(41)/v(100); v(2935347310677)/v(11292855782101); ...
       v(1426016391358)/v(7196633302097); v(92)/v(100); v(24)/v(100); v(3)/v(5); v(1)];
@@ -735,6 +757,8 @@ elseif (strcmp(method_name,'ARK5(4)8L[2]SA-ESDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ARK5(4)8L[2]SAb-ERK'))
+   % From: Kennedy & Carpenter, Appl. Numer. Math. 136 (2019), doi:
+   %       10.1016/j.apnum.2018.10.007
 
    gam = v(2)/v(9);
    c = [z; v(4)/v(9); v(6456083330201)/v(8509243623797); v(1632083962415)/v(14158861528103); ...
@@ -769,6 +793,8 @@ elseif (strcmp(method_name,'ARK5(4)8L[2]SAb-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ARK5(4)8L[2]SAb-ESDIRK'))
+   % From: Kennedy & Carpenter, Appl. Numer. Math. 136 (2019), doi:
+   %       10.1016/j.apnum.2018.10.007
 
    gam = v(2)/v(9);
    c = [z; v(4)/v(9); v(6456083330201)/v(8509243623797); v(1632083962415)/v(14158861528103); ...
@@ -803,6 +829,7 @@ elseif (strcmp(method_name,'ARK5(4)8L[2]SAb-ESDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Sayfy-Aburub-4-3-ERK'))
+   % From: Sayfy & Aburub, Int. J. Comput. Math. 79 (2002), doi: 10.1080/00207160212109
 
    A = [z, z, z, z, z, z; ...
         v(1)/v(2), z, z, z, z, z;
@@ -818,6 +845,8 @@ elseif (strcmp(method_name,'Sayfy-Aburub-4-3-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Ascher(2,3,3)-ERK'))
+   % From: Ascher, Ruuth & Spiteri, Appl. Numer. Math. 25 (1997), doi:
+   %       10.1016/S0168-9274(97)00056-1
 
    gamma = (v(3) + sqrt(v(3)))/v(6);
    c = [z; gamma; v(1)-gamma];
@@ -829,6 +858,8 @@ elseif (strcmp(method_name,'Ascher(2,3,3)-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Ascher(2,3,3)-SDIRK'))
+   % From: Ascher, Ruuth & Spiteri, Appl. Numer. Math. 25 (1997), doi:
+   %       10.1016/S0168-9274(97)00056-1
 
    gamma = (v(3) + sqrt(v(3)))/v(6);
    c = [z; gamma; v(1)-gamma];
@@ -840,6 +871,8 @@ elseif (strcmp(method_name,'Ascher(2,3,3)-SDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Ascher(2,3,2)-ERK'))
+   % From: Ascher, Ruuth & Spiteri, Appl. Numer. Math. 25 (1997), doi:
+   %       10.1016/S0168-9274(97)00056-1
 
    gamma = (v(2)-sqrt(v(2)))/v(2);
    delta = -v(2)*sqrt(v(2))/v(3);
@@ -852,6 +885,8 @@ elseif (strcmp(method_name,'Ascher(2,3,2)-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Ascher(2,3,2)-SDIRK'))
+   % From: Ascher, Ruuth & Spiteri, Appl. Numer. Math. 25 (1997), doi:
+   %       10.1016/S0168-9274(97)00056-1
 
    gamma = (v(2)-sqrt(v(2)))/v(2);
    c = [z; gamma; v(1)];
@@ -863,6 +898,8 @@ elseif (strcmp(method_name,'Ascher(2,3,2)-SDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Ascher(2,2,2)-ERK'))
+   % From: Ascher, Ruuth & Spiteri, Appl. Numer. Math. 25 (1997), doi:
+   %       10.1016/S0168-9274(97)00056-1
 
    gamma = (v(2)-sqrt(v(2)))/v(2);
    delta = v(1)-v(1)/(v(2)*gamma);
@@ -877,6 +914,8 @@ elseif (strcmp(method_name,'Ascher(2,2,2)-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Ascher(2,2,2)-SDIRK'))
+   % From: Ascher, Ruuth & Spiteri, Appl. Numer. Math. 25 (1997), doi:
+   %       10.1016/S0168-9274(97)00056-1
 
    gamma = (v(2)-sqrt(v(2)))/v(2);
    c = [z; gamma; v(1)];
@@ -890,6 +929,8 @@ elseif (strcmp(method_name,'Ascher(2,2,2)-SDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Ascher(3,4,3)-ERK'))
+   % From: Ascher, Ruuth & Spiteri, Appl. Numer. Math. 25 (1997), doi:
+   %       10.1016/S0168-9274(97)00056-1
 
    gamma  = v(0.4358665215084589994160194511935568425293);
    gamma2 = gamma^2;
@@ -920,6 +961,8 @@ elseif (strcmp(method_name,'Ascher(3,4,3)-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Ascher(3,4,3)-SDIRK'))
+   % From: Ascher, Ruuth & Spiteri, Appl. Numer. Math. 25 (1997), doi:
+   %       10.1016/S0168-9274(97)00056-1
 
    gamma  = v(0.4358665215084589994160194511935568425293);
    gamma2 = gamma^2;
@@ -937,6 +980,8 @@ elseif (strcmp(method_name,'Ascher(3,4,3)-SDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Ascher(4,4,3)-ERK'))
+   % From: Ascher, Ruuth & Spiteri, Appl. Numer. Math. 25 (1997), doi:
+   %       10.1016/S0168-9274(97)00056-1
 
    c = [z; v(1)/v(2); v(2)/v(3); v(1)/v(2); v(1)];
    b = [v(1)/v(4), v(7)/v(4), v(3)/v(4), v(-7)/v(4), z];
@@ -949,6 +994,8 @@ elseif (strcmp(method_name,'Ascher(4,4,3)-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Ascher(4,4,3)-SDIRK'))
+   % From: Ascher, Ruuth & Spiteri, Appl. Numer. Math. 25 (1997), doi:
+   %       10.1016/S0168-9274(97)00056-1
 
    c = [v(1)/v(2); v(2)/v(3); v(1)/v(2); v(1)];
    b = [v(3)/v(2), v(-3)/v(2), v(1)/v(2), v(1)/v(2)];
@@ -960,6 +1007,8 @@ elseif (strcmp(method_name,'Ascher(4,4,3)-SDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Knoth-Wolke-ERK'))
+   % From: Knoth & Wolke, Appl. Numer. Math. 28 (1998), doi:
+   %       10.1016/S0168-9274(98)00051-8
 
    c = [z; v(1)/v(3); v(3)/v(4)];
    b = [v(1)/v(6), v(3)/v(10), v(8)/v(15)];
@@ -970,6 +1019,7 @@ elseif (strcmp(method_name,'Knoth-Wolke-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'3/8-Rule-ERK'))
+   % From: Kutta, Z. Math. Phys. 46:435--453 (1901)
 
    c = [z; v(1)/v(3); v(2)/v(3); v(1)];
    b = [v(1)/v(8), v(3)/v(8), v(3)/v(8), v(1)/v(8)];
@@ -981,6 +1031,8 @@ elseif (strcmp(method_name,'3/8-Rule-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Cooper4-ERK'))
+   % From: the order-3 methods with mu = 1/2 in Cooper & Sayfy, Math. Comp. 40 (1983),
+   %       doi: 10.1090/S0025-5718-1983-0679441-1
 
    c = [z; v(2)/v(3); v(2)/v(3); v(1)];
    b = [v(1)/v(4), v(1)/v(4), v(1)/v(2), z];
@@ -992,6 +1044,8 @@ elseif (strcmp(method_name,'Cooper4-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Cooper4-ESDIRK'))
+   % From: the order-3 methods with mu = 1/2 in Cooper & Sayfy, Math. Comp. 40 (1983),
+   %       doi: 10.1090/S0025-5718-1983-0679441-1
 
    c = [z; v(2)/v(3); v(2)/v(3); v(1)];
    b = [v(1)/v(4), v(1)/v(4), v(1)/v(2), z];
@@ -1003,6 +1057,8 @@ elseif (strcmp(method_name,'Cooper4-ESDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Cooper6-ERK'))
+   % From: the first of the order-4 methods in Cooper & Sayfy, Math. Comp. 40 (1983),
+   %       doi: 10.1090/S0025-5718-1983-0679441-1
 
    c = [z; v(1)/v(2); v(1)/v(2); v(1)/v(2); v(1); v(1)];
    b = [v(1)/v(6), z, z, v(2)/v(3), v(1)/v(6), z];
@@ -1012,12 +1068,14 @@ elseif (strcmp(method_name,'Cooper6-ERK'))
         v(1)/v(4), v(1)/v(4), z, z, z, z;
         z, v(-1), z, v(2), z, z;
         v(1)/v(6), z, z, v(2)/v(3), v(1)/v(6), z];
-   q = 5;
+   q = 4;
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Cooper6-ESDIRK'))
+   % From: the first of the order-4 methods in Cooper & Sayfy, Math. Comp. 40 (1983),
+   %       doi: 10.1090/S0025-5718-1983-0679441-1
 
-   beta = v(1.0685790213);
+   beta = v(1)/v(2) + cos(v(pi)/v(18))/sqrt(v(3));   % largest root of 24b^3 - 36b^2 + 12b - 1 = 0
    c = [z; v(1)/v(2); v(1)/v(2); v(1)/v(2); v(1); v(1)];
    b = [v(1)/v(6), z, z, v(2)/v(3), v(1)/v(6), z];
    A = [z, z, z, z, z, z;
@@ -1026,10 +1084,11 @@ elseif (strcmp(method_name,'Cooper6-ESDIRK'))
         v(1)/v(4), beta/v(2), (v(1)-v(6)*beta)/v(4), beta, z, z;
         z, v(-2)*beta, (v(1)-v(6)*beta-v(8)*beta^2)/(v(1)-v(4)*beta), v(4)*beta/(v(1)-v(4)*beta), z, z;
         v(1)/v(6), z, z, v(2)/v(3), v(1)/v(6), z];
-   q = 5;
+   q = 4;
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Heun-Euler-ERK'))
+   % TODO: add citation
 
    A = [ z, z; v(1), z];
    b = [ v(0.5), v(0.5)];
@@ -1040,6 +1099,8 @@ elseif (strcmp(method_name,'Heun-Euler-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP(2,2)-ERK'))
+   % From: Fekete, Conde & Shadid, J. Comput. Appl. Math. 412 (2022), doi:
+   %       10.1016/j.cam.2022.114325
    % The method and embedding both have SSP coefficient 1.0
 
    A = [ z, z; v(1), z];
@@ -1051,6 +1112,8 @@ elseif (strcmp(method_name,'SSP(2,2)-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP(2,2)-SDIRK'))
+   % From: base method (implicit portion of IMEX-SSP2(2,2,2)): Pareschi & Russo, J. Sci.
+   %       Comput. 25 (2005), doi: 10.1007/BF02728986
    % The method has SSP coefficient 2.41421, and
    % the embedding has SSP coefficient 3.34869
    % For the embedding di = [d, 1-d] to be A-stable, we require that 0.295 < d < 0.5
@@ -1066,6 +1129,8 @@ elseif (strcmp(method_name,'SSP(2,2)-SDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP(3,2)-ERK'))
+   % From: Fekete, Conde & Shadid, J. Comput. Appl. Math. 412 (2022), doi:
+   %       10.1016/j.cam.2022.114325
    % The method and embedding both have SSP coefficient 2.0
 
    A = [  z,   z, z;...
@@ -1079,6 +1144,9 @@ elseif (strcmp(method_name,'SSP(3,2)-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP(3,2)-DIRK'))
+   % From: method: Pareschi & Russo, J. Sci. Comput. 25 (2005), doi: 10.1007/BF02728986;
+   %       embedding: SUNDIALS ARKODE documentation, table ARKODE_SSP_DIRK_3_1_2,
+   %       https://sundials.readthedocs.io/en/latest/arkode/Butcher_link.html#c.ARKODE_SSP_DIRK_3_1_2
    % The method and embedding both have SSP coefficient 2.4
 
    A = [v(1)/v(4),   z,   z;...
@@ -1092,6 +1160,8 @@ elseif (strcmp(method_name,'SSP(3,2)-DIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP(4,2)-ERK'))
+   % From: Fekete, Conde & Shadid, J. Comput. Appl. Math. 412 (2022), doi:
+   %       10.1016/j.cam.2022.114325
 
    A = [ z, z, z, z;
          v(1)/v(3), z, z, z;
@@ -1105,6 +1175,8 @@ elseif (strcmp(method_name,'SSP(4,2)-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP(10,2)-ERK'))
+   % From: Fekete, Conde & Shadid, J. Comput. Appl. Math. 412 (2022), doi:
+   %       10.1016/j.cam.2022.114325
 
    t1 = v(1)/v(9);
    A = [ z, z, z, z, z, z, z, z, z, z;
@@ -1126,6 +1198,8 @@ elseif (strcmp(method_name,'SSP(10,2)-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP(4,3)-ERK'))
+   % From: Fekete, Conde & Shadid, J. Comput. Appl. Math. 412 (2022), doi:
+   %       10.1016/j.cam.2022.114325
 
    A = [ z, z, z, z;
          v(1)/v(2), z, z, z;
@@ -1139,6 +1213,8 @@ elseif (strcmp(method_name,'SSP(4,3)-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP(4,3)-ESDIRK'))
+   % From: SUNDIALS ARKODE documentation, table ARKODE_ESDIRK_4_2_3,
+   %       https://sundials.readthedocs.io/en/latest/arkode/Butcher_link.html#c.ARKODE_ESDIRK_4_2_3
 
    gam = v(0.43586652150845899941601945119355684);
    A = [ z, z, z, z;
@@ -1171,6 +1247,8 @@ elseif (strcmp(method_name,'SSP(9,3)-ESDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP(9,3)-ERK'))
+   % From: Fekete, Conde & Shadid, J. Comput. Appl. Math. 412 (2022), doi:
+   %       10.1016/j.cam.2022.114325
 
    t1 = v(1)/v(6);
    t2 = v(1)/v(15);
@@ -1192,6 +1270,8 @@ elseif (strcmp(method_name,'SSP(9,3)-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP(16,3)-ERK'))
+   % From: Fekete, Conde & Shadid, J. Comput. Appl. Math. 412 (2022), doi:
+   %       10.1016/j.cam.2022.114325
 
    x = v(1)/v(12);
    y = v(1)/v(28);
@@ -1208,6 +1288,8 @@ elseif (strcmp(method_name,'SSP(16,3)-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP(10,4)-ERK'))
+   % From: Fekete, Conde & Shadid, J. Comput. Appl. Math. 412 (2022), doi:
+   %       10.1016/j.cam.2022.114325
 
    t1 = v(1)/v(6);
    t2 = v(1)/v(15);
@@ -1230,6 +1312,8 @@ elseif (strcmp(method_name,'SSP(10,4)-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Bogacki-Shampine-ERK'))
+   % From: Bogacki & Shampine, Appl. Math. Lett. 2 (1989), doi:
+   %       10.1016/0893-9659(89)90079-7
 
    A = [z, z, z, z; v(1)/v(2), z, z, z; z, v(3)/v(4), z, z; v(2)/v(9), v(1)/v(3), v(4)/v(9), z];
    b = [v(2)/v(9), v(1)/v(3), v(4)/v(9), z];
@@ -1240,6 +1324,7 @@ elseif (strcmp(method_name,'Bogacki-Shampine-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Fehlberg-ERK'))
+   % From: Fehlberg, NASA Technical Report R-315 (1969)
 
    A = [z, z, z, z, z, z; ...
         v(1)/v(4), z, z, z, z, z; ...
@@ -1255,6 +1340,7 @@ elseif (strcmp(method_name,'Fehlberg-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Cash-Karp-ERK'))
+   % From: Cash & Karp, ACM Trans. Math. Software 16 (1990), doi: 10.1145/79505.79507
 
    A = [ z, z, z, z, z, z; ...
          v(1)/v(5), z, z, z, z, z; ...
@@ -1270,6 +1356,8 @@ elseif (strcmp(method_name,'Cash-Karp-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Dormand-Prince-ERK'))
+   % From: Dormand & Prince, J. Comput. Appl. Math. 6 (1980), doi:
+   %       10.1016/0771-050X(80)90013-3
 
    A = [ z, z, z, z, z, z, z; ...
          v(1)/v(5), z, z, z, z, z, z; ...
@@ -1286,6 +1374,8 @@ elseif (strcmp(method_name,'Dormand-Prince-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'TRBDF2-ESDIRK'))
+   % From: Bank, Coughran, Fichtner, Grosse, Rose & Smith, IEEE Trans. Comput.-Aided Des.
+   %       Integr. Circuits Syst. 4 (1985), doi: 10.1109/TCAD.1985.1270142
 
    A = [z, z, z; ...
       (v(2)-sqrt(v(2)))/v(2), (v(2)-sqrt(v(2)))/v(2), z; ...
@@ -1298,6 +1388,7 @@ elseif (strcmp(method_name,'TRBDF2-ESDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'TRX2-ESDIRK'))
+   % TODO: add citation
 
    A = [ z, z, z; v(0.25), v(0.25), z; v(0.25), v(0.5), v(0.25)];
    b = [ v(0.25), v(0.5), v(0.25)];
@@ -1308,6 +1399,9 @@ elseif (strcmp(method_name,'TRX2-ESDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Billington-SDIRK'))
+   % From: Billington, Type-insensitive codes for the solution of stiff and nonstiff
+   %       systems of ordinary differential equations, Master's thesis, University of
+   %       Manchester (1983)
 
    A = [v(0.292893218813), z, z; ...
         v(0.798989873223), v(0.292893218813), z; ...
@@ -1320,6 +1414,7 @@ elseif (strcmp(method_name,'Billington-SDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Cash(5,2,4)-SDIRK'))
+   % From: Cash, IMA J. Appl. Math. 24 (1979), doi: 10.1093/imamat/24.3.293
 
    A = [v(0.435866521508), z, z, z, z; ...
         v(-1.13586652150), v(0.435866521508), z, z, z; ...
@@ -1337,6 +1432,7 @@ elseif (strcmp(method_name,'Cash(5,2,4)-SDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Cash(5,3,4)-SDIRK'))
+   % From: Cash, IMA J. Appl. Math. 24 (1979), doi: 10.1093/imamat/24.3.293
 
    A = [v(0.435866521508), z, z, z, z; ...
         v(-1.13586652150), v(0.435866521508), z, z, z; ...
@@ -1353,6 +1449,7 @@ elseif (strcmp(method_name,'Cash(5,3,4)-SDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Kvaerno(4,2,3)-ESDIRK'))
+   % From: Kvaerno, BIT Numer. Math. 44 (2004), doi: 10.1023/B:BITN.0000046811.70614.38
 
    A = [z, z, z, z; ...
         v(0.4358665215), v(0.4358665215), z, z; ...
@@ -1366,6 +1463,7 @@ elseif (strcmp(method_name,'Kvaerno(4,2,3)-ESDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Kvaerno(5,3,4)-ESDIRK'))
+   % From: Kvaerno, BIT Numer. Math. 44 (2004), doi: 10.1023/B:BITN.0000046811.70614.38
 
    A = [z, z, z, z, z; ...
         v(0.4358665215), v(0.4358665215), z, z, z; ...
@@ -1380,6 +1478,7 @@ elseif (strcmp(method_name,'Kvaerno(5,3,4)-ESDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Kvaerno(7,4,5)-ESDIRK'))
+   % From: Kvaerno, BIT Numer. Math. 44 (2004), doi: 10.1023/B:BITN.0000046811.70614.38
 
    A = [z, z, z, z, z, z, z; ...
         v(0.26), v(0.26), z, z, z, z, z; ...
@@ -1397,6 +1496,7 @@ elseif (strcmp(method_name,'Kvaerno(7,4,5)-ESDIRK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ERK-1-1'))   % explicit Euler
+   % From: Euler, Institutiones calculi integralis, Vol. 1 (1768)
 
    A = [z];
    b = [v(1)];
@@ -1413,6 +1513,7 @@ elseif (strcmp(method_name,'ERK-2-2'))   % Ralston's method, doi: 10.1090/S0025-
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'ERK-3-3'))
+   % From: base method: Kutta, Z. Math. Phys. 46:435--453 (1901)
 
    A = [ z, z, z; v(1)/v(2), z, z; v(-1), v(2), z];
    b = [ v(1)/v(6), v(2)/v(3), v(1)/v(6)];
@@ -1423,6 +1524,7 @@ elseif (strcmp(method_name,'ERK-3-3'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ERK-4-4'))
+   % From: Kutta, Z. Math. Phys. 46:435--453 (1901)
 
    A = [z, z, z, z; v(1)/v(2), z, z, z; z, v(1)/v(2), z, z; z, z, v(1), z];
    b = [v(1)/v(6), v(1)/v(3), v(1)/v(3), v(1)/v(6)];
@@ -1431,6 +1533,7 @@ elseif (strcmp(method_name,'ERK-4-4'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Butcher-7-6-ERK'))
+   % TODO: add citation
 
    A = [z, z, z, z, z, z, z;
        v(1)/v(3), z, z, z, z, z, z;
@@ -1445,6 +1548,7 @@ elseif (strcmp(method_name,'Butcher-7-6-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Butcher-7-6b-ERK'))
+   % TODO: add citation
 
    A = [z, z, z, z, z, z, z;
         v(2)/v(5), z, z, z, z, z, z;
@@ -1459,6 +1563,7 @@ elseif (strcmp(method_name,'Butcher-7-6b-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Butcher-9-7-ERK'))
+   % TODO: add citation
 
    A = [z, z, z, z, z, z, z, z, z;
         v(1)/v(6), z, z, z, z, z, z, z, z;
@@ -1475,6 +1580,7 @@ elseif (strcmp(method_name,'Butcher-9-7-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'CooperVerner-11-8-ERK'))
+   % From: Cooper & Verner, SIAM J. Numer. Anal. 9 (1972), doi: 10.1137/0709037
 
    s21 = sqrt(21);
    A = [z, z, z, z, z, z, z, z, z, z, z;
@@ -1494,6 +1600,7 @@ elseif (strcmp(method_name,'CooperVerner-11-8-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Merson-4-3-ERK'))
+   % TODO: add citation
 
    A = [z, z, z, z, z; v(1)/v(3), z, z, z, z; v(1)/v(6), v(1)/v(6), z, z, z; ...
         v(1)/v(8), z, v(3)/v(8), z, z; v(1)/v(2), z, v(-3)/v(2), v(2), z];
@@ -1505,6 +1612,8 @@ elseif (strcmp(method_name,'Merson-4-3-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Zonneveld-4-3-ERK'))
+   % From: Zonneveld, Automatic integration of ordinary differential equations, Report
+   %       R743, Mathematisch Centrum, Amsterdam (1963)
 
    A = [z, z, z, z, z; v(1)/v(2), z, z, z, z; z, v(1)/v(2), z, z, z; ...
         z, z, v(1), z, z; v(5)/v(32), v(7)/v(32), v(13)/v(32), v(-1)/v(32), z];
@@ -1517,6 +1626,8 @@ elseif (strcmp(method_name,'Zonneveld-4-3-ERK'))
 
 
 elseif (strcmp(method_name,'Verner-6-5-ERK'))
+   % From: Hull, Enright & Jackson, User's guide for DVERK, Technical Report 100,
+   %       Department of Computer Science, University of Toronto (1976)
 
    A = [z, z, z, z, z, z, z, z; ...
         v(1)/v(6), z, z, z, z, z, z, z; ...
@@ -1535,6 +1646,7 @@ elseif (strcmp(method_name,'Verner-6-5-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Verner-6-5b-ERK'))
+   % From: Verner, Numer. Algorithms 53 (2010), doi: 10.1007/s11075-009-9290-3
 
    A = [z, z, z, z, z, z, z, z, z; ...
         v(3)/v(50), z, z, z, z, z, z, z, z; ...
@@ -1555,6 +1667,7 @@ elseif (strcmp(method_name,'Verner-6-5b-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Verner-7-6-ERK'))
+   % From: Verner, Numer. Algorithms 53 (2010), doi: 10.1007/s11075-009-9290-3
 
    A = [z, z, z, z, z, z, z, z, z, z; ...
         v(1)/v(200), z, z, z, z, z, z, z, z, z; ...
@@ -1576,6 +1689,7 @@ elseif (strcmp(method_name,'Verner-7-6-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Verner-8-7-ERK'))
+   % From: Verner, Numer. Algorithms 53 (2010), doi: 10.1007/s11075-009-9290-3
 
    A = [z, z, z, z, z, z, z, z, z, z, z, z, z; ...
         v(1)/v(20), z, z, z, z, z, z, z, z, z, z, z, z; ...
@@ -1600,6 +1714,7 @@ elseif (strcmp(method_name,'Verner-8-7-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Fehlberg-8-7-ERK'))
+   % From: Fehlberg, NASA Technical Report R-287 (1968)
 
    A = [z, z, z, z, z, z, z, z, z, z, z, z, z; ...
         v(2)/v(27), z, z, z, z, z, z, z, z, z, z, z, z; ...
@@ -1623,6 +1738,7 @@ elseif (strcmp(method_name,'Fehlberg-8-7-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Verner-9-8-ERK'))
+   % From: Verner, Numer. Algorithms 53 (2010), doi: 10.1007/s11075-009-9290-3
 
    A = [z, z, z, z, z, z, z, z, z, z, z, z, z, z, z, z; ...
         v(0.3462e-1), z, z, z, z, z, z, z, z, z, z, z, z, z, z, z; ...
@@ -1649,6 +1765,7 @@ elseif (strcmp(method_name,'Verner-9-8-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SDIRK-2-2'))
+   % TODO: add citation
 
    A = [v(1)-v(1)/sqrt(v(2)), z; v(1)/sqrt(v(2)), v(1)-v(1)/sqrt(v(2))];
    b = [ v(1)/sqrt(v(2)), v(1) - v(1)/sqrt(v(2))];
@@ -1659,6 +1776,7 @@ elseif (strcmp(method_name,'SDIRK-2-2'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SDIRK-2-1'))
+   % TODO: add citation
 
    A = [v(1), z; v(-1), v(1)];
    b = [ v(1)/v(2), v(1)/v(2)];
@@ -1669,6 +1787,7 @@ elseif (strcmp(method_name,'SDIRK-2-1'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'IRK-1-1'))
+   % TODO: add citation
 
    c = [v(1)];
    b = [v(1)];
@@ -1677,6 +1796,7 @@ elseif (strcmp(method_name,'IRK-1-1'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Crank-Nicolson-2-2-IRK'))
+   % TODO: add citation
 
    A = [ v(1)/v(2), v(1)/v(2); z, z];
    b = [ v(1)/v(2), v(1)/v(2)];
@@ -1685,6 +1805,7 @@ elseif (strcmp(method_name,'Crank-Nicolson-2-2-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'SIRK-2-2'))
+   % TODO: add citation
 
    A = [(v(5)-v(3)*sqrt(v(2)))/v(4), (v(7)-v(5)*sqrt(v(2)))/v(4); ...
         (v(1)+v(1)*sqrt(v(2)))/v(4), (v(3)-v(1)*sqrt(v(2)))/v(4)];
@@ -1694,6 +1815,7 @@ elseif (strcmp(method_name,'SIRK-2-2'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Gauss-2-4-IRK'))
+   % TODO: add citation
 
    A = [v(1)/v(4), v(1)/v(4)-sqrt(v(3))/v(6); v(1)/v(4)+sqrt(v(3))/v(6), v(1)/v(4)];
    b = [v(1)/v(2), v(1)/v(2)];
@@ -1702,6 +1824,7 @@ elseif (strcmp(method_name,'Gauss-2-4-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'RadauIIA-2-3-IRK'))
+   % TODO: add citation
 
    A = [v(5)/v(12), v(-1)/v(12); v(9)/v(12), v(3)/v(12)];
    b = [v(3)/v(4), v(1)/v(4)];
@@ -1710,6 +1833,7 @@ elseif (strcmp(method_name,'RadauIIA-2-3-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIII-2-2-IRK'))
+   % TODO: add citation
 
    A = [z, z; v(1), z];
    b = [v(1)/v(2), v(1)/v(2)];
@@ -1718,6 +1842,7 @@ elseif (strcmp(method_name,'LobattoIII-2-2-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIIIA-2-2-IRK'))
+   % TODO: add citation
 
    A = [ z, z; v(1)/v(2), v(1)/v(2)];
    b = [ v(1)/v(2), v(1)/v(2)];
@@ -1726,6 +1851,7 @@ elseif (strcmp(method_name,'LobattoIIIA-2-2-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIIIC-2-2-IRK'))
+   % TODO: add citation
 
    A = [ v(1)/v(2), v(-1)/v(2); v(1)/v(2), v(1)/v(2)];
    b = [ v(1)/v(2), v(1)/v(2)];
@@ -1734,6 +1860,7 @@ elseif (strcmp(method_name,'LobattoIIIC-2-2-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'Gauss-3-6-IRK'))
+   % TODO: add citation
 
    A = [v(5)/v(36), v(2)/v(9)-sqrt(v(15))/v(15), v(5)/v(36)-sqrt(v(15))/v(30); ...
       v(5)/v(36)+sqrt(v(15))/v(24), v(2)/v(9), v(5)/v(36)-sqrt(v(15))/v(24); ...
@@ -1744,6 +1871,7 @@ elseif (strcmp(method_name,'Gauss-3-6-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'RadauI-3-5-IRK'))
+   % TODO: add citation
 
    A = [z, z, z; ...
       (v(9)+sqrt(v(6)))/v(75), (v(24)+sqrt(v(6)))/v(120), (v(168)-v(73)*sqrt(v(6)))/v(600); ...
@@ -1754,6 +1882,7 @@ elseif (strcmp(method_name,'RadauI-3-5-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'RadauIA-3-5-IRK'))
+   % TODO: add citation
 
    A = [v(1)/v(9), -(v(1)+sqrt(v(6)))/v(18), -(v(1)-sqrt(v(6)))/v(18); ...
       v(1)/v(9), (v(88)+v(7)*sqrt(v(6)))/v(360), (v(88)-v(43)*sqrt(v(6)))/v(360); ...
@@ -1764,6 +1893,7 @@ elseif (strcmp(method_name,'RadauIA-3-5-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'RadauII-3-5-IRK'))
+   % TODO: add citation
 
    A = [(v(24)-sqrt(v(6)))/v(120), (v(24)-v(11)*sqrt(v(6)))/v(120), z; ...
       (v(24)+v(11)*sqrt(v(6)))/v(120), (v(24)+sqrt(v(6)))/v(120), z; ...
@@ -1774,6 +1904,7 @@ elseif (strcmp(method_name,'RadauII-3-5-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'RadauIIA-3-5-IRK'))
+   % TODO: add citation
 
    A = [(v(88)-v(7)*sqrt(v(6)))/v(360), (v(296)-v(169)*sqrt(v(6)))/v(1800), (-v(2)+v(3)*sqrt(v(6)))/v(225); ...
       (v(296)+v(169)*sqrt(v(6)))/v(1800), (v(88)+v(7)*sqrt(v(6)))/v(360), (-v(2)-v(3)*sqrt(v(6)))/v(225); ...
@@ -1784,6 +1915,7 @@ elseif (strcmp(method_name,'RadauIIA-3-5-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIII-3-4-IRK'))
+   % TODO: add citation
 
    A = [z, z, z; v(1)/v(4), v(1)/v(4), z; z, v(1), z];
    b = [v(1)/v(6), v(2)/v(3), v(1)/v(6)];
@@ -1792,6 +1924,7 @@ elseif (strcmp(method_name,'LobattoIII-3-4-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIIIA-3-4-IRK'))
+   % TODO: add citation
 
    A = [ z, z, z; v(5)/v(24), v(1)/v(3), v(-1)/v(24); v(1)/v(6), v(2)/v(3), v(1)/v(6)];
    b = [ v(1)/v(6), v(2)/v(3), v(1)/v(6)];
@@ -1800,6 +1933,7 @@ elseif (strcmp(method_name,'LobattoIIIA-3-4-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIIIB-3-4-IRK'))
+   % TODO: add citation
 
    A = [ v(1)/v(6), v(-1)/v(6), z; v(1)/v(6), v(1)/v(3), z; v(1)/v(6), v(5)/v(6), z];
    b = [ v(1)/v(6), v(2)/v(3), v(1)/v(6)];
@@ -1808,6 +1942,7 @@ elseif (strcmp(method_name,'LobattoIIIB-3-4-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIIIC-3-4-IRK'))
+   % TODO: add citation
 
    A = [ v(1)/v(6), v(-1)/v(3), v(1)/v(6); v(1)/v(6), v(5)/v(12), v(-1)/v(12); v(1)/v(6), v(2)/v(3), v(1)/v(6)];
    b = [ v(1)/v(6), v(2)/v(3), v(1)/v(6)];
@@ -1816,6 +1951,7 @@ elseif (strcmp(method_name,'LobattoIIIC-3-4-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'RadauIIA-4-7-IRK'))
+   % TODO: add citation
 
    A = [v(0.1129994793231561859938500530113885006791), v(-0.04030922072352220573554988839315989493430), ...
           v(0.02580237742033639103594009159581420862867), v(-0.009904676507266423898694112444586617487772);
@@ -1833,6 +1969,7 @@ elseif (strcmp(method_name,'RadauIIA-4-7-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIII-4-6-IRK'))
+   % TODO: add citation
 
    A = [z, z, z, z; ...
       (v(5)+sqrt(v(5)))/v(60), v(1)/v(6), (v(15)-v(7)*sqrt(v(5)))/v(60), z; ...
@@ -1844,6 +1981,7 @@ elseif (strcmp(method_name,'LobattoIII-4-6-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIIIA-4-6-IRK'))
+   % TODO: add citation
 
    A = [z, z, z, z; ...
       (v(11)+sqrt(v(5)))/v(120), (v(25)-sqrt(v(5)))/v(120), (v(25)-v(13)*sqrt(v(5)))/v(120), (-v(1)+sqrt(v(5)))/v(120); ...
@@ -1855,6 +1993,7 @@ elseif (strcmp(method_name,'LobattoIIIA-4-6-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIIIB-4-6-IRK'))
+   % TODO: add citation
 
    A = [v(1)/v(12), (-v(1)-sqrt(v(5)))/v(24), (-v(1)+sqrt(v(5)))/v(24), z; ...
       v(1)/v(12), (v(25)+sqrt(v(5)))/v(120), (v(25)-v(13)*sqrt(v(5)))/v(120), z; ...
@@ -1866,6 +2005,7 @@ elseif (strcmp(method_name,'LobattoIIIB-4-6-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIIIC-4-6-IRK'))
+   % TODO: add citation
 
    A = [v(1)/v(12), -sqrt(v(5))/v(12), sqrt(v(5))/v(12), -v(1)/v(12); ...
       v(1)/v(12), v(1)/v(4), (v(10)-v(7)*sqrt(v(5)))/v(60), sqrt(v(5))/v(60); ...
@@ -1877,6 +2017,7 @@ elseif (strcmp(method_name,'LobattoIIIC-4-6-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'RadauIIA-5-9-IRK'))
+   % TODO: add citation
 
    A = [v(0.07299886431790337), v(-0.02673533110794565), v(0.01867692976398445), ...
           v(-0.01287910609330652), v(0.005042839233882052);
@@ -1896,6 +2037,7 @@ elseif (strcmp(method_name,'RadauIIA-5-9-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIII-5-8-IRK'))
+   % TODO: add citation
 
    A = [z, z, z, z, z; ...
       v(1)/v(14), v(1)/v(9), (v(13)-v(3)*sqrt(v(21)))/v(63), (v(14)-v(3)*sqrt(v(21)))/v(126), z; ...
@@ -1908,6 +2050,7 @@ elseif (strcmp(method_name,'LobattoIII-5-8-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIIIA-5-8-IRK'))
+   % TODO: add citation
 
    A = [z, z, z, z, z; ...
       (v(119)+v(3)*sqrt(v(21)))/v(1960), (v(343)-v(9)*sqrt(v(21)))/v(2520), (v(392)-v(96)*sqrt(v(21)))/v(2205), (v(343)-v(69)*sqrt(v(21)))/v(2520), (-v(21)+v(3)*sqrt(v(21)))/v(1960); ...
@@ -1920,6 +2063,7 @@ elseif (strcmp(method_name,'LobattoIIIA-5-8-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIIIB-5-8-IRK'))
+   % TODO: add citation
 
    A = [v(1)/v(20), (-v(7)-sqrt(v(21)))/v(120), v(1)/v(15), (-v(7)+sqrt(v(21)))/v(120), z; ...
       v(1)/v(20), (v(343)+v(9)*sqrt(v(21)))/v(2520), (v(56)-v(15)*sqrt(v(21)))/v(315), (v(343)-v(69)*sqrt(v(21)))/v(2520), z; ...
@@ -1932,6 +2076,7 @@ elseif (strcmp(method_name,'LobattoIIIB-5-8-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'LobattoIIIC-5-8-IRK'))
+   % TODO: add citation
 
    A = [v(1)/v(20), v(-7)/v(60), v(2)/v(15), v(-7)/v(60), v(1)/v(20); ...
       v(1)/v(20), v(29)/v(180), (v(47)-v(15)*sqrt(v(21)))/v(315), (v(203)-v(30)*sqrt(v(21)))/v(1260), -v(3)/v(140); ...
@@ -2007,6 +2152,8 @@ elseif (strcmp(method_name,'ESDIRK3(2I)5L[2]SA'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SDIRK-5-4'))
+   % From: Hairer & Wanner, Solving Ordinary Differential Equations II, 2nd ed., Springer
+   %       (1996), doi: 10.1007/978-3-642-05221-7
 
    A = [v(1)/v(4), z, z, z, z; ...
       v(1)/v(2), v(1)/v(4), z, z, z; ...
@@ -2021,6 +2168,7 @@ elseif (strcmp(method_name,'SDIRK-5-4'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'Gauss-6-12-IRK'))
+   % TODO: add citation
 
    A = [v(0.042831123094792580851996218950605), v(-0.014763725997197424643891429014278),  ...
           v(0.0093250507064777618411400734121424), v(-0.0056688580494835162182488917046817), ...
@@ -2050,6 +2198,8 @@ elseif (strcmp(method_name,'Gauss-6-12-IRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'ARK(2,3,2)-ERK'))
+   % From: Giraldo, Kelly & Constantinescu, SIAM J. Sci. Comput. 35 (2013), doi:
+   %       10.1137/120876034
 
    gamma = v(1) - v(1)/sqrt(v(2));
    alpha = v(1)/v(6) * (v(3)+v(2)*sqrt(v(2)));
@@ -2069,6 +2219,8 @@ elseif (strcmp(method_name,'ARK(2,3,2)-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'ARK(2,3,2)-SDIRK'))
+   % From: Giraldo, Kelly & Constantinescu, SIAM J. Sci. Comput. 35 (2013), doi:
+   %       10.1137/120876034
 
    gamma = v(1) - v(1)/sqrt(v(2));
    alpha = v(1)/v(6) * (v(3)+v(2)*sqrt(v(2)));
@@ -2109,6 +2261,8 @@ elseif (strcmp(method_name,'SSP2(2,2,2)-SDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lpm1-ERK'))
+   % From: Higueras, Happenhofer, Koch & Kupka, J. Comput. Appl. Math. 272 (2014), doi:
+   %       10.1016/j.cam.2014.05.011
 
    A = [  z,   z, z;...
         v(1)/v(2),   z, z;...
@@ -2119,6 +2273,8 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lpm1-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lpm1-SDIRK'))
+   % From: Higueras, Happenhofer, Koch & Kupka, J. Comput. Appl. Math. 272 (2014), doi:
+   %       10.1016/j.cam.2014.05.011
 
    A = [         v(2)/v(11),    z,    z;...
             v(2829)/v(9317), v(2)/v(11),    z;...
@@ -2129,6 +2285,8 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lpm1-SDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lpm2-ERK'))
+   % From: Higueras, Happenhofer, Koch & Kupka, J. Comput. Appl. Math. 272 (2014), doi:
+   %       10.1016/j.cam.2014.05.011
 
    A = [  z,   z, z;...
         v(1)/v(2),   z, z;...
@@ -2139,6 +2297,8 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lpm2-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lpm2-SDIRK'))
+   % From: Higueras, Happenhofer, Koch & Kupka, J. Comput. Appl. Math. 272 (2014), doi:
+   %       10.1016/j.cam.2014.05.011
 
    A = [        v(2)/v(11),     z,    z;...
           v(2583)/v(13310),  v(2)/v(11),    z;...
@@ -2149,6 +2309,8 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lpm2-SDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lpum-ERK'))
+   % From: Higueras, Happenhofer, Koch & Kupka, J. Comput. Appl. Math. 272 (2014), doi:
+   %       10.1016/j.cam.2014.05.011
 
    A = [  z,   z, z;...
         v(1)/v(2),   z, z;...
@@ -2159,6 +2321,8 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lpum-ERK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lpum-SDIRK'))
+   % From: Higueras, Happenhofer, Koch & Kupka, J. Comput. Appl. Math. 272 (2014), doi:
+   %       10.1016/j.cam.2014.05.011
 
    A = [        v(2)/v(11),      z,    z;...
               v(41)/v(154),   v(2)/v(11),    z;...
@@ -2169,7 +2333,7 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lpum-SDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-ERK'))
-  % explicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1137/040612968 (custom embedding)
+  % explicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1016/j.cam.2014.05.011 (custom embedding)
 
    A = [    z,     z, z;...
           v(5)/v(6),     z, z;...
@@ -2182,7 +2346,7 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-ERK'))
    B = [c, A; q, b; p, b2];
 
 elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-SDIRK'))
-  % implicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1137/040612968 (custom embedding)
+  % implicit portion of IMEX-SSP2(3,3,2)-LSPUM from https://doi.org/10.1016/j.cam.2014.05.011 (custom embedding)
 
    A = [        v(2)/v(11),      z,    z;...
              v(205)/v(462),   v(2)/v(11),    z;...
@@ -2361,6 +2525,9 @@ elseif (strcmp(method_name,'SSP3(4,3,3)-SDIRK'))
    B = [c, A; q, b];
 
 elseif (strcmp(method_name,'SSPRK(3,3)-Shu-Osher-ERK'))
+   % From: method: Shu & Osher, J. Comput. Phys. 77 (1988), doi:
+   %       10.1016/0021-9991(88)90177-5; embedding: Fekete, Conde & Shadid, J. Comput. Appl.
+   %       Math. 412 (2022), doi: 10.1016/j.cam.2022.114325
 
    A = [ z,   z,   z;...
          v(1),   z,   z;...
