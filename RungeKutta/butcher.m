@@ -76,7 +76,6 @@ function B = butcher(method_name,symbolic)
 %        SSP2(3,3,2)-lpm2-ERK  |  3 |  2   2  | 1e-40
 %        SSP2(3,3,2)-lpum-ERK  |  3 |  2   2  | 1e-40
 %         SSP2(3,3,2)-lum-ERK  |  3 |  2   2  | 1e-40
-%       SSP2(3,3,2)-lspum-ERK  |  3 |  2   2  | 1e-40
 %           SSP2(3,3,2)-a-ERK  |  3 |  2   2  | 1e-40
 %           SSP2(3,3,2)-b-ERK  |  3 |  2   2  | 1e-40
 %           Ascher(2,3,3)-ERK  |  3 |  3   3  | 1e-40
@@ -147,7 +146,6 @@ function B = butcher(method_name,symbolic)
 %      SSP2(3,3,2)-lpm2-SDIRK  |  3 |  2   2   Y       Y  |  1  1e-40
 %      SSP2(3,3,2)-lpum-SDIRK  |  3 |  2   2   Y       Y  |  1  1e-40
 %        SSP2(3,3,2)-lum-DIRK  |  3 |  2   2   Y       Y  |  1  1e-40
-%     SSP2(3,3,2)-lspum-SDIRK  |  3 |  2   2   Y       Y  |  1  1e-40
 %          SSP2(3,3,2)-a-DIRK  |  3 |  2   2   Y       Y  |  1  1e-40
 %          SSP2(3,3,2)-b-DIRK  |  3 |  2   2   Y       Y  |  1  1e-40
 %           SSP3(3,3,2)-SDIRK  |  3 |  2   2   Y       Y  |  1  1e-40
@@ -2339,7 +2337,7 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-ERK'))
       v(5)/v(6),     z, z;...
       v(11)/v(24), v(11)/v(24), z];
    b = [v(24)/v(55), v(1)/v(5), v(4)/v(11)];
-   b2 = [v(4247)/v(9840), v(21343)/v(108240), v(49)/v(132)];
+   b2 = [v(73467)/v(180400), v(32969)/v(180400), v(41)/v(100)];
    c = [z; v(5)/v(6); v(11)/v(12)];
    q = 2;
    p = 1;
@@ -2352,7 +2350,7 @@ elseif (strcmp(method_name,'SSP2(3,3,2)-lspum-SDIRK'))
       v(205)/v(462),   v(2)/v(11),    z;...
       v(2033)/v(4620), v(21)/v(110), v(2)/v(11)];
    b = [v(24)/v(55), v(1)/v(5), v(4)/v(11)];
-   b2 = [v(4247)/v(9840), v(21343)/v(108240), v(49)/v(132)];
+   b2 = [v(73467)/v(180400), v(32969)/v(180400), v(41)/v(100)];
    c = [v(2)/v(11); v(289)/v(462); v(751)/v(924)];
    q = 2;
    p = 1;
