@@ -99,25 +99,6 @@ if (stages_im + 2 == rows_im) %embedding exists
     end
 end
 
-[alpha_s1, beta_s1] = stab_function(Atilde_im,b_embedding);
-
-%keep coefficeints above machine precision
-alpha_s1_amcp = abs(alpha_s1)>=eps;
-beta_s1_amcp  = abs(beta_s1)>=eps;
-alpha_s1      = alpha_s1(alpha_s1_amcp);
-beta_s1       = beta_s1(beta_s1_amcp);
-
-deg_alpha_s1 = length(alpha_s1); % number of coefficients of the numerator polynomial (alpha)
-deg_beta_s1 = length(beta_s1);  % number of coefficients of the denominator polynomial (beta)
-
-if (deg_alpha_s1 < deg_beta_s1)
-    fprintf('Implicit method with embedding is L-stable. \n')
-elseif (deg_alpha_s1 == deg_beta_s1)
-    fprintf('Implicit method with embedding is A-stable but not L-stable. \n')
-else %deg_alpha_s1 > deg_beta_s1
-    fprintf('Implicit method with embedding is not L-stable.\n') 
-end
-
 fprintf("\n")
 fprintf("=================Checking LSPUM Properties=====================\n")
 
@@ -164,7 +145,7 @@ end
 [alpha_ex, beta_ex] = stab_function(A_ex,b_ex); %coefficients of rational polynomial
 alpha_ex = double(alpha_ex); %real numbers for polyval
 beta_ex = double(beta_ex);
-omega_vals          = linspace(1e-2, 5, 5000);           
+omega_vals = linspace(1e-2, 5, 5000);           
 w_max = 0; %size of the interval so far, initialising
 
 for ik = 1:length(omega_vals)
@@ -173,7 +154,7 @@ for ik = 1:length(omega_vals)
     if abs(R) <= 1
         w_max = omega_vals(ik);   
     else
-        break;                    % first point outside
+        break; % first point outside in the imaginary regions
     end
 end
 
@@ -238,8 +219,6 @@ for r1 = r1_vals
                     all(matrixM\bigA >= -tol_m, 'all') && ...
                     all(matrixM\bigAt >= -tol_m, 'all'))
                 m_property = true;
-                % fprintf('ImEx method has a nontrivial region of absolute monotonicity at (%.8f, %.8f). Hence, "M" property is satisfied.\n', r1,r2);
-                % break;
             end
         end
     end
