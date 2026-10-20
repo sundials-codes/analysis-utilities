@@ -66,20 +66,44 @@ Atilde_im  = butcher_im(1:end-1, 2:end);  %matrix A from implicit method
 btilde_im  = butcher_im(new_rows_im, 2:end); %vector b from implicit method
 ctilde_im  = butcher_im(1:end-1, 1); % vector c from implicit method
 
-
-%tolerance to remove coefficients below machine precison
-tolerance = eps;
-
 % ====== Check stability property of implicit method with embedding =======
-if (stages_im + 2 == rows_im) %embedding exisits
+y_vals   = [0, logspace(-4, 6, 2000)];
+if (stages_im + 2 == rows_im) %embedding exists
     b_embedding = B_implicit(end, 2:end);
+    [alpha_s1, beta_s1] = stab_function(Atilde_im, b_embedding);
+    alpha_s1 = double(alpha_s1);
+    beta_s1  = double(beta_s1);
+
+    deg_alpha_s1 = find(abs(alpha_s1) >= eps, 1, 'last') - 1;
+    deg_beta_s1  = find(abs(beta_s1)  >= eps, 1, 'last') - 1;
+
+    A_stable_s1 = true;
+    for ik = 1:length(y_vals)
+        z = 1i * y_vals(ik);
+        R = polyval(flip(alpha_s1), z) / polyval(flip(beta_s1), z);
+        if abs(R) > 1 + 1e-12
+            A_stable_s1 = false;
+        end
+    end
+    poles = roots(flip(beta_s1(1:deg_beta_s1+1)));
+    if any(real(poles) <= 0)
+        A_stable_s1 = false;
+    end
+
+    if (A_stable_s1 && deg_alpha_s1 < deg_beta_s1)
+        fprintf('Implicit method with embedding is L-stable.\n')
+    elseif (A_stable_s1)
+        fprintf('Implicit method with embedding is A-stable but not L-stable.\n')
+    else
+        fprintf('Implicit method with embedding is not A-stable.\n')
+    end
 end
 
 [alpha_s1, beta_s1] = stab_function(Atilde_im,b_embedding);
 
 %keep coefficeints above machine precision
-alpha_s1_amcp = abs(alpha_s1)>=tolerance;
-beta_s1_amcp  = abs(beta_s1)>=tolerance;
+alpha_s1_amcp = abs(alpha_s1)>=eps;
+beta_s1_amcp  = abs(beta_s1)>=eps;
 alpha_s1      = alpha_s1(alpha_s1_amcp);
 beta_s1       = beta_s1(beta_s1_amcp);
 
@@ -103,90 +127,89 @@ fprintf("=================Checking LSPUM Properties=====================\n")
 
 % ================ Check 'L' property using stab_function.m ===============
 [alpha, beta] = stab_function(Atilde_im,btilde_im);
+alpha = double(alpha);
+beta = double(beta);
 
-%keep coefficeints above machine precision
-alpha_amcp = abs(alpha)>=tolerance;
-beta_amcp  = abs(beta)>=tolerance;
-alpha      = alpha(alpha_amcp);
-beta       = beta(beta_amcp);
+% degree = position of the LAST nonzero coefficient
+deg_alpha = find(abs(alpha) >= eps, 1, 'last') - 1; % number of coefficients of the numerator polynomial (alpha)
+deg_beta  = find(abs(beta)  >= eps, 1, 'last') - 1; % number of coefficients of the denominator polynomial (beta)
 
-deg_alpha     = length(alpha); % number of coefficients of the numerator polynomial (alpha)
-deg_beta      = length(beta);  % number of coefficients of the denominator polynomial (beta)
+%check for A-stability: |R(iy)| <= 1 on the imaginary axis
+y_vals   = [0, logspace(-4, 6, 2000)];
+A_stable = true;
+for ik = 1:length(y_vals)
+    z = 1i * y_vals(ik);
+    R = polyval(flip(alpha), z) / polyval(flip(beta), z);
+    if abs(R) > 1 + 1e-12
+        A_stable = false;
+    end
+end
 
-if (deg_alpha < deg_beta)
+% A-stability, all poles must be in the right half-plane
+poles = roots(flip(beta(1:deg_beta+1)));%flipping because in stab function polynomial degrees go from lowest to highest
+if any(real(poles) <= 0)
+    A_stable = false;
+end
+
+if (A_stable && deg_alpha < deg_beta)
     fprintf('Implicit method is L-stable. Hence, "L" property is satisfied.\n')
-elseif (deg_alpha == deg_beta)
+elseif (A_stable)
     fprintf('Implicit method is A-stable but not L-stable. Hence, "L" property is not satisfied.\n')
-else %deg_alpha > deg_beta
+else 
     fprintf('Implicit method is not L-stable (also not A-stable). Hence, "L" property is not satified.\n') % hence not L-stable
 end
 
 
 % ================= Check 'S' property using stab_function.m ==============
 [alpha_ex, beta_ex] = stab_function(A_ex,b_ex); %coefficients of rational polynomial
-omega_vals          = logspace(-8,0);           
-s_property          = false;
+alpha_ex = double(alpha_ex); %real numbers for polyval
+beta_ex = double(beta_ex);
+omega_vals          = linspace(1e-2, 5, 5000);           
+w_max = 0; %size of the interval so far, initialising
 
 for ik = 1:length(omega_vals)
-    num_val   = 0.0 + 0.0i;
-    denom_val = 0.0 + 0.0i;
-
-    for k = 1:length(alpha_ex)
-        num_val = num_val + alpha_ex(k)*(1i * omega_vals(ik))^(k-1); %value of the numerator polynomial at the imaginary value
-    end
-
-    for k = 1:length(beta_ex)
-        denom_val = denom_val + beta_ex(k)*(1i * omega_vals(ik))^(k-1); %value of the denominator polynomial at the imaginary value
-    end
-
-    stab_val = num_val/denom_val;
-    if abs(stab_val) <= 1 % is absolute value of rational polynomial at the imaginary value is less than or equal to 1
-        s_property = true;
-        % break;  %exit the loop once an omega value results in an interval on the imaginary axis for the explicit method
+    z = 1i * omega_vals(ik);
+    R = polyval(flip(alpha_ex), z) / polyval(flip(beta_ex), z);
+    if abs(R) <= 1
+        w_max = omega_vals(ik);   
+    else
+        break;                    % first point outside
     end
 end
+
+s_property = (w_max > 0);
 
 if (s_property)
-    fprintf('Stability region for the explicit part contains an interval on the imaginary axis. Hence, "S" property is satisfied.\n');
+    fprintf('Explicit stability region contains [-iw, iw] with w = %.4f. Hence, "S" property is satisfied.\n', w_max);
 else
-    fprintf('Stability region for the explicit part DOES NOT contain an interval on the imaginary axis. Hence, "S" property is not satisfied.\n');
+    fprintf('Explicit stability region DOES NOT contain an interval on the imaginary axis. Hence, "S" property is not satisfied.\n');
 end
 
 
-% =========================== Check 'P' property ==========================
+% =========================== Check 'P' property (R(z)>=0) ==========================
 [alpha_im, beta_im] = stab_function(Atilde_im,btilde_im); %coefficients of rational polynomial
-omega_vals          = logspace(-8,0);          
-p_property          = false;
-
-for ik = 1:length(omega_vals)
-    num_val   = 0.0 + 0.0i;
-    denom_val = 0.0 + 0.0i;
-
-    for k = 1:length(alpha_im)
-        num_val = num_val + alpha_im(k)*(1i * omega_vals(ik))^(k-1); %value of the numerator polynomial at the imaginary value
-    end
-
-    for k = 1:length(beta_im)
-        denom_val = denom_val + beta_im(k)*(1i * omega_vals(ik))^(k-1); %value of the denominator polynomial at the imaginary value
-    end
-
-    stab_val = num_val/denom_val;
-    if abs(stab_val) > 0 % is absolute value of rational polynomial at the imaginary value is less than or equal to 1
-        p_property = true;
-        % break;  %exit the loop once an omega value results in an interval on the imaginary axis for the explicit method
+alpha_im = double(alpha_im); %real numbers for polyval
+beta_im = double(beta_im);
+z_vals  = -logspace(-8,8,2000); 
+p_property = true; 
+for ik = 1:length(z_vals)
+    R = polyval(flip(alpha_im), z_vals(ik)) / polyval(flip(beta_im), z_vals(ik));
+    if R < 0
+        p_property = false;   % found a negative value, hence P fails
+        break;
     end
 end
 
 if (p_property)
-    fprintf('Amplification factor for the implicit method is positive. Hence, "P" property is satisfied.\n');
+    fprintf('Amplification factor for/Stability function of the implicit method is non-negative for all z <= 0. Hence, "P" property is satisfied.\n');
 else
-    fprintf('Amplification factor for the implicit method is NOT positive. Hence, "P" property is not satisfied.\n');
+    fprintf('Amplification factor for/Stability function of the implicit method becomes negative for some z < 0.. Hence, "P" property is not satisfied.\n');
 end
 
 
 % ======================== Check 'U' property =============================
 uc_val = btilde_im*(Atilde_im\c_ex);
-if (uc_val==1)
+if  abs(uc_val - 1) < 1e-12
     fprintf(['ImEx method is uniformly convergent. ' ...
         'Hence, "U" property is satisfied.\n'])
 else
@@ -196,18 +219,24 @@ end
 
 
 % ========================= Check 'M' property ============================
+s = stages_ex;
+bigA =  double([A_ex, zeros(s,1); b_ex, 0]); %A with b added as last row
+bigAt = double([Atilde_im, zeros(s,1); btilde_im, 0]);
 r1_vals    = logspace(-8,0);
 r2_vals    = logspace(-8,0);
-e          = ones(stages_ex,1);
+e          = ones(s+1,1);
+tol_m = 1e-14;
 m_property = false;
 
 % I + r1*A + r2*Atilde is nonsigular, inv(I + r1*A + r2*Atilde)*e >=0
 % inv(I + r1*A + r2*Atilde)*A >=0,    inv(I + r1*A + r2*Atilde)*Atilde >=0
 for r1 = r1_vals
     for r2 = r2_vals
-        matrixM = eye(stages_ex) + r1 * A_ex + r2 * Atilde_im;
+        matrixM = eye(s+1) + r1 * bigA + r2 * bigAt;
         if (det(matrixM)~=0)
-            if (all(matrixM\e >= 0, 'all') && all(matrixM\A_ex >= 0, 'all') && all(matrixM\Atilde_im >= 0, 'all'))
+            if (all(matrixM\e >= -tol_m, 'all') && ...
+                    all(matrixM\bigA >= -tol_m, 'all') && ...
+                    all(matrixM\bigAt >= -tol_m, 'all'))
                 m_property = true;
                 % fprintf('ImEx method has a nontrivial region of absolute monotonicity at (%.8f, %.8f). Hence, "M" property is satisfied.\n', r1,r2);
                 % break;
